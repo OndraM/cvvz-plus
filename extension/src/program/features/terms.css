@@ -1,0 +1,51 @@
+.cvvz-no-terms {
+    color: #6c757d;
+}
+
+.cvvz-program > .row {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.cvvz-program > .row > * {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+}
+
+/* The site makes every .btn display: flex !important. */
+.cvvz-program .program-dates-dropdown > [data-bs-toggle="dropdown"] {
+    display: none !important;
+}
+
+.cvvz-program .program-dates-dropdown .dropdown-menu {
+    display: block;
+    position: static;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+.cvvz-program .program-dates-dropdown .dropdown-menu .dropdown-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 1em;
+    padding: 8px 0;
+    border-bottom: 1px solid #dadada;
+    white-space: normal;
+    background: transparent;
+    color: inherit;
+}
+
+.cvvz-program .program-dates-dropdown .dropdown-item > .align-items-center {
+    margin-left: auto;
+}
+
+/* Overrides Bootstrap's .ms-auto, which is !important. */
+.cvvz-program .program-dates-dropdown .dropdown-item > form {
+    margin-left: 0 !important;
+}

@@ -1,0 +1,13 @@
+.cvvz-badge,
+.cvvz-label {
+    display: inline-block;
+    margin: 5px;
+    vertical-align: middle;
+}
+
+.cvvz-label {
+    padding: 3px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+}

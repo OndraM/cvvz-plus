@@ -1,0 +1,36 @@
+/* Common layout of a program section. Styles of individual features live next to them in features/. */
+
+.cvvz-hidden {
+    display: none !important;
+}
+
+.cvvz-program {
+    margin-top: 2em;
+}
+
+.cvvz-program p {
+    margin-top: 20px;
+}
+
+.cvvz-program a {
+    color: #131514;
+}
+
+/* Same look as the site's program header (.alert.success). */
+.cvvz-header {
+    padding: 18px 20px;
+    border-radius: 12px;
+    background: #7b4a1e;
+    color: #fff;
+    font-weight: 700;
+    font-size: clamp(16px, calc(16px + 0.004 * (100vw - 320px)), 20px);
+    line-height: 1.4;
+}
+
+/* A heading for screen readers, but it looks like the rest of the header. */
+.cvvz-title {
+    display: inline;
+    margin: 0;
+    color: inherit;
+    font: inherit;
+}

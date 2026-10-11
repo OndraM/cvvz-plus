@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "CVVZ plus",
+  "version": "2026.10.0",
+  "description": "Neoficiální rozšíření pro přehlednější web CVVZ",
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.cvvz.cz/*"],
+      "js": [
+        "src/shared/features.js",
+        "src/site/features/logo-plus.js",
+        "src/program/parse.js",
+        "src/program/layout.js",
+        "src/program/program-list.js",
+        "src/program/features/filter-form.js",
+        "src/program/features/program-type.js",
+        "src/program/features/permalink.js",
+        "src/program/features/labels.js",
+        "src/program/features/lecturer.js",
+        "src/program/features/description.js",
+        "src/program/features/terms.js",
+        "src/main.js"
+      ],
+      "css": [
+        "src/site/features/logo-plus.css",
+        "src/program/layout.css",
+        "src/program/features/filter-form.css",
+        "src/program/features/program-type.css",
+        "src/program/features/permalink.css",
+        "src/program/features/labels.css",
+        "src/program/features/description.css",
+        "src/program/features/terms.css"
+      ]
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "cvvz-plus@ondram",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    },
+    "gecko_android": {
+      "strict_min_version": "142.0"
+    }
+  }
+}

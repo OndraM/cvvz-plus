@@ -1,0 +1,19 @@
+.cvvz-description {
+    line-height: 1.4;
+    white-space: pre-line;
+}
+
+.cvvz-truncated .cvvz-description-text {
+    cursor: pointer;
+}
+
+/* A button that looks like the links around it. */
+.cvvz-more {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #131514;
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}

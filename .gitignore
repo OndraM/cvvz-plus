@@ -1,0 +1,4 @@
+node_modules/
+web-ext-artifacts/
+.claude-scratch/
+README.local.md

@@ -1,0 +1,20 @@
+{
+  "name": "cvvz-plus",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
+  "scripts": {
+    "test": "node --test test/main.test.js \"test/*/**/*.test.js\"",
+    "test:live": "node --test test/live.test.js",
+    "start": "web-ext run --source-dir extension --start-url https://www.cvvz.cz/program",
+    "start:android": "web-ext run --target firefox-android --source-dir extension",
+    "lint": "web-ext lint --source-dir extension",
+    "build": "web-ext build --source-dir extension --overwrite-dest"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.2",
+    "web-ext": "^10.7.0"
+  }
+}
