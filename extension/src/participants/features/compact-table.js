@@ -1,7 +1,7 @@
 registerFeature({
     page: 'participants',
     name: 'compact-table',
-    label: 'Kompaktnější tabulka (nižší řádky, upravené šířky sloupců aj.)',
+    label: 'Kompaktnější tabulka seznamu účastníků (nižší řádky, upravené šířky sloupců aj.)',
 
     enhancePage(document) {
         const table = findParticipantTable(document);

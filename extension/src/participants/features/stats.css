@@ -1,0 +1,344 @@
+.cvvz-stats-tabs {
+    display: flex;
+    gap: 24px;
+    margin-top: 28px;
+    border-bottom: 1px solid #dadada;
+}
+
+.cvvz-stats-tab {
+    margin-bottom: -1px;
+    padding: 8px 0;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    background: none;
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.cvvz-stats-tab[aria-selected="true"] {
+    border-bottom-color: #7b4a1e;
+    color: #131514;
+}
+
+/* Raised, as the badge next to the site's logo, without making the line higher. */
+.cvvz-stats-plus {
+    display: inline-block;
+    position: relative;
+    top: -0.5em;
+    width: 0.75em;
+    height: 0.75em;
+    margin-left: 0.25em;
+    opacity: 0.6;
+}
+
+/* Overrides the site's color of menu links, set with a long selector. */
+.dropdown-item.cvvz-stats-coming-soon {
+    color: #adb5bd !important;
+}
+
+.cvvz-stats-tab-count {
+    margin-left: 6px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.cvvz-stats {
+    display: grid;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.cvvz-stats-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+}
+
+.cvvz-stats-switch {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(80, 50, 20, 0.06), 0 0 0 1px rgba(80, 50, 20, 0.08);
+}
+
+.cvvz-stats-switch button {
+    padding: 6px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #131514;
+    font-weight: 500;
+}
+
+.cvvz-stats-switch button[aria-pressed="true"] {
+    background: #7b4a1e;
+    color: #fff;
+}
+
+.cvvz-stats-switch-count {
+    margin-left: 4px;
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
+}
+
+.cvvz-stats-note {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.875em;
+}
+
+.cvvz-stats-filter {
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #f4ebe2;
+}
+
+.cvvz-stats-cards {
+    display: grid;
+    align-items: start;
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .cvvz-stats-cards {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.cvvz-stats-wide {
+    grid-column: 1 / -1;
+}
+
+/* Same look as the program cards. */
+.cvvz-stats-card,
+.cvvz-stats-tile {
+    display: grid;
+    min-width: 0;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(80, 50, 20, 0.06), 0 0 0 1px rgba(80, 50, 20, 0.08);
+}
+
+.cvvz-stats-card {
+    gap: 12px;
+    padding: 16px 20px;
+}
+
+.cvvz-stats-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4px 12px;
+}
+
+.cvvz-stats-card h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.cvvz-stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+}
+
+.cvvz-stats-tile {
+    gap: 2px;
+    padding: 12px 16px;
+}
+
+.cvvz-stats-tile-label {
+    color: #6c757d;
+    font-size: 0.875em;
+}
+
+.cvvz-stats-figure {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.cvvz-stats-paid-bar {
+    display: flex;
+    gap: 2px;
+    height: 26px;
+}
+
+.cvvz-stats-paid-bar > :first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.cvvz-stats-paid-bar > :last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.cvvz-stats-paid-bar > :only-child {
+    border-radius: 4px;
+}
+
+.cvvz-stats-paid {
+    background: #7b4a1e;
+}
+
+.cvvz-stats-unpaid {
+    background: #e09a4c;
+}
+
+.cvvz-stats-dimmed {
+    opacity: 0.3;
+}
+
+.cvvz-stats-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+}
+
+.cvvz-stats-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+    border-radius: 3px;
+}
+
+.cvvz-stats-columns {
+    display: grid;
+    align-items: end;
+    gap: 4px;
+    height: 140px;
+    border-bottom: 1px solid #dadada;
+}
+
+.cvvz-stats-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 3px;
+    height: 100%;
+}
+
+.cvvz-stats-column-count {
+    font-size: 0.75em;
+    font-weight: 600;
+}
+
+.cvvz-stats-column-fill {
+    width: min(100%, 24px);
+    border-radius: 4px 4px 0 0;
+    background: #7b4a1e;
+}
+
+.cvvz-stats-axis {
+    display: grid;
+    gap: 4px;
+    margin-top: 4px;
+    color: #6c757d;
+    font-size: 0.75em;
+    text-align: center;
+}
+
+.cvvz-stats-axis-title {
+    color: #6c757d;
+    font-size: 0.75em;
+    text-align: center;
+}
+
+.cvvz-stats-ranking {
+    display: grid;
+    gap: 10px;
+}
+
+.cvvz-stats-bar {
+    display: grid;
+    gap: 3px;
+}
+
+.cvvz-stats-bar-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 0.9375em;
+}
+
+.cvvz-stats-bar-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.cvvz-stats-bar-name small {
+    color: #6c757d;
+}
+
+.cvvz-stats-bar-value {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.cvvz-stats-bar-fill {
+    display: block;
+    height: 10px;
+    border-radius: 0 4px 4px 0;
+    background: #7b4a1e;
+}
+
+.cvvz-stats-units .cvvz-stats-bar-label,
+.cvvz-stats-others .cvvz-stats-bar-label {
+    font-size: 0.875em;
+}
+
+.cvvz-stats-units .cvvz-stats-bar-fill,
+.cvvz-stats-others .cvvz-stats-bar-fill {
+    height: 6px;
+}
+
+.cvvz-stats-group > summary,
+.cvvz-stats-others > summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+.cvvz-stats-group > summary::-webkit-details-marker,
+.cvvz-stats-others > summary::-webkit-details-marker {
+    display: none;
+}
+
+.cvvz-stats-group > summary .cvvz-stats-bar-name::before,
+.cvvz-stats-others > summary::before {
+    content: "▸";
+    display: inline-block;
+    width: 1.1em;
+    color: #7b4a1e;
+}
+
+.cvvz-stats-group[open] > summary .cvvz-stats-bar-name::before,
+.cvvz-stats-others[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+.cvvz-stats-units {
+    display: grid;
+    gap: 8px;
+    margin: 8px 0 4px 1.1em;
+    padding-left: 10px;
+    border-left: 2px solid #e6e0da;
+}
+
+.cvvz-stats-others > summary {
+    color: #6c757d;
+    font-size: 0.875em;
+}
+
+.cvvz-stats-others > .cvvz-stats-ranking {
+    margin-top: 10px;
+}

@@ -40,10 +40,11 @@ Každý modul jde vypnout v nastavení rozšíření.
 
 **Stránka Přihlášení účastníci** (`participants`, https://www.cvvz.cz/prihlaseni-ucastnici):
 
-| Modul           | Popis                                                          |
-|-----------------|----------------------------------------------------------------|
-| `compact-table` | Kompaktnější tabulka (nižší řádky, upravené šířky sloupců aj.) |
-| `contacts`      | Zobrazit FB, telefon a e-mail v jednom sloupci jako ikonky     |
+| Modul           | Popis                                                                                         |
+|-----------------|-----------------------------------------------------------------------------------------------|
+| `stats`         | Přidá podstránku Statistiky účastníků do záložky vedle seznamu účastníků, přidá odkaz do menu |
+| `compact-table` | Kompaktnější tabulka seznamu účastníků (nižší řádky, upravené šířky sloupců aj.)              |
+| `contacts`      | Zobrazit FB, telefon a e-mail v jednom sloupci jako ikonky                                    |
 
 ## Struktura
 
@@ -82,6 +83,9 @@ Moduly běží v pořadí podle `manifest.json` a v tom pořadí se také zobraz
 Moduly upravují přímo tabulku webu (`enhancePage`). Buňky skrývají (třída `cvvz-hidden`), přesouvají nebo mění jejich obsah.
 Pokud web změní v HTML sloupce tabulky, moduly ji nechají v původní podobě a do konzole se vypíše varování.
 
+Modul `stats` počítá statistiky z řádků tabulky, takže při filtru (město, organizace) jsou to statistiky vyfiltrovaných účastníků.
+Tabulku čte dřív, než ji ostatní moduly změní, proto musí být v `manifest.json` první.
+
 ### Přidání nové úpravy
 
 1. Vytvořit `extension/src/<stránka>/features/nazev.js`, např. `extension/src/program/features/nazev.js`:
@@ -96,6 +100,9 @@ Pokud web změní v HTML sloupce tabulky, moduly ji nechají v původní podobě
        },
        enhancePage(document) {
            // volitelné: pro úpravy celé stránky (na stránce Program se spustí jednou po všech programech)
+       },
+       enhanceSite(document) {
+           // volitelné: spustí se na všech stránkách webu, pro části modulu mimo jeho stránku (např. odkaz na něj v menu)
        },
    });
    ```

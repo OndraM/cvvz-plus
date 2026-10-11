@@ -93,7 +93,7 @@ test('program features run only on the program page, also with a filter in the U
 
 test('participant features run only on the participant page, also with a filter in the URL', () => {
     const elsewhere = enhancePage(PARTICIPANTS_PAGE, { url: 'https://www.cvvz.cz/' });
-    assert.equal(elsewhere.document.querySelector('.cvvz-compact-table, .cvvz-contacts'), null);
+    assert.equal(elsewhere.document.querySelector('.cvvz-compact-table, .cvvz-contacts, .cvvz-stats'), null);
     assert.deepEqual(elsewhere.warnings, []);
 
     const filtered = enhancePage(PARTICIPANTS_PAGE, { url: 'https://www.cvvz.cz/prihlaseni-ucastnici?event_registration_filter%5Bcity%5D=Brno' });

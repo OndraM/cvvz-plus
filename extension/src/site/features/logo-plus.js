@@ -8,7 +8,7 @@ registerFeature({
         if (!logoLink) {
             throw new Error('logo not found');
         }
-        const sign = buildElement('span', 'cvvz-logo-plus', 'Plus');
+        const sign = buildElement('span', 'cvvz-logo-plus cvvz-plus', 'Plus');
         sign.title = 'Web je vylepšen neoficiálním rozšířením CVVZ plus. Ať slouží!';
         logoLink.append(sign);
     },

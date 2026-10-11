@@ -17,15 +17,19 @@ function runFeatures() {
 }
 
 function runEnabledFeatures(disabledIds) {
-    const features = FEATURES.filter((feature) => PAGES[feature.page](document.location) && !disabledIds.includes(featureId(feature)));
+    const enabledFeatures = FEATURES.filter((feature) => !disabledIds.includes(featureId(feature)));
+    const features = enabledFeatures.filter((feature) => PAGES[feature.page](document.location));
     const failures = [];
 
     if (PAGES.program(document.location)) {
         failures.push(...enhanceProgramList(features.filter((feature) => feature.page === 'program')));
     }
-    for (const feature of features) {
+    for (const feature of enabledFeatures) {
         try {
-            feature.enhancePage?.(document);
+            feature.enhanceSite?.(document);
+            if (features.includes(feature)) {
+                feature.enhancePage?.(document);
+            }
         } catch (error) {
             failures.push({ id: featureId(feature), reason: error.message });
         }

@@ -11,6 +11,8 @@ const FEATURES = [];
 //                                                    // original rows of these fields get hidden, see program/program-list.js
 //     renderProgram(program, layout, original) {},   // program page only: called for each program
 //     enhancePage(document) {},                      // optional, called once when its page loads
+//     enhanceSite(document) {},                      // optional, called once on every page of the site,
+//                                                    // for the parts of a feature outside its page (like a link to it)
 // });
 //
 // Features run in the order of the manifest.

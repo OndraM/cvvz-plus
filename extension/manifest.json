@@ -33,6 +33,7 @@
         "src/program/features/term-capacity.js",
         "src/program/features/program-count.js",
         "src/participants/table.js",
+        "src/participants/features/stats.js",
         "src/participants/features/compact-table.js",
         "src/participants/features/contacts.js",
         "src/main.js"
@@ -52,6 +53,7 @@
         "src/program/features/program-card.css",
         "src/program/features/term-capacity.css",
         "src/program/features/program-count.css",
+        "src/participants/features/stats.css",
         "src/participants/features/compact-table.css",
         "src/participants/features/contacts.css"
       ]
