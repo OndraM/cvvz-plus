@@ -3,6 +3,7 @@
 }
 
 body {
+    min-width: min(640px, calc(100vw - 32px));
     margin: 16px;
     font: 15px/1.5 system-ui, sans-serif;
 }
