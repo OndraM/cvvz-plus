@@ -121,6 +121,12 @@ test('a program with content the parser does not read fails, so nothing gets hid
 
     const imageInLabels = PAGE_2026.replace('<div class="py-2 d-flex flex-wrap gap-1">', '<div class="py-2 d-flex flex-wrap gap-1"><img class="icon" src="/new.png">');
     assert.deepEqual(parsePage(imageInLabels).failures, [{ id: 'program-644', reason: 'unexpected element <img class="icon">' }]);
+
+    const imageInToggle = PAGE_2026.replace('aria-controls="program-description-644">Detailní popis', 'aria-controls="program-description-644">Detailní popis<img src="/new.png">');
+    assert.deepEqual(parsePage(imageInToggle).failures, [{ id: 'program-644', reason: 'unexpected element in "Detailní popis"' }]);
+
+    const changedProgramsLink = PAGE_2026.replace('Zobrazit programy tohoto lektora', 'Zobrazit 3 programy tohoto lektora');
+    assert.deepEqual(parsePage(changedProgramsLink).failures, [{ id: 'program-644', reason: 'unexpected text of the lecturer programs link' }]);
 });
 
 test('a program with a duplicate description fails', () => {

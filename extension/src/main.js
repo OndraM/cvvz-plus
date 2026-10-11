@@ -1,4 +1,4 @@
-// Entry point, loaded last: runs the features of the pages the current URL belongs to.
+// Entry point, loaded last: runs the enabled features of the pages the current URL belongs to.
 
 // Pages with features, each in its own folder src/<page>/. A feature names its page in `page`.
 const PAGES = {
@@ -12,7 +12,11 @@ function runFeatures() {
     }
     document.documentElement.setAttribute('data-cvvz-plus', '');
 
-    const features = FEATURES.filter((feature) => PAGES[feature.page](document.location));
+    loadDisabledFeatureIds(runEnabledFeatures);
+}
+
+function runEnabledFeatures(disabledIds) {
+    const features = FEATURES.filter((feature) => PAGES[feature.page](document.location) && !disabledIds.includes(featureId(feature)));
     const failures = [];
 
     if (PAGES.program(document.location)) {
@@ -22,7 +26,7 @@ function runFeatures() {
         try {
             feature.enhancePage?.(document);
         } catch (error) {
-            failures.push({ id: `${feature.page}/${feature.name}`, reason: error.message });
+            failures.push({ id: featureId(feature), reason: error.message });
         }
     }
 

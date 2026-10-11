@@ -3,9 +3,8 @@ const DESCRIPTION_WORD_LIMIT = 25;
 registerFeature({
     page: 'program',
     name: 'description',
-    description: `Shows the detailed description directly instead of the collapsed "Detailní popis". `
-        + `A longer one is shortened to ${DESCRIPTION_WORD_LIMIT} words; the "» Více" button (or a click on the text) shows all of it, `
-        + `"« Méně" shortens it again.`,
+    label: `Detailní popis programu je rovnou viditelný (zkrácený na ${DESCRIPTION_WORD_LIMIT} slov s tlačítkem "Více")`,
+    shows: ['description'],
 
     renderProgram(program, layout) {
         if (program.description) {

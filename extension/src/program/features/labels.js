@@ -1,8 +1,8 @@
 registerFeature({
     page: 'program',
     name: 'labels',
-    description: 'Shows the program labels (štítky) and its details from the collapsed "Další podrobnosti" table '
-        + '(physical demands, interaction, difficulty, surcharge) as one row of labels. An empty or zero surcharge is not shown.',
+    label: 'Zobrazit parametry programu jako štítky (místo ve schované tabulce)',
+    shows: ['labels', 'physicalLevel', 'interactionLevel', 'difficulty', 'surcharge'],
 
     renderProgram(program, layout) {
         const row = buildElement('p', 'cvvz-labels');

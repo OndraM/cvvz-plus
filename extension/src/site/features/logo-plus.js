@@ -1,7 +1,7 @@
 registerFeature({
     page: 'site',
     name: 'logo-plus',
-    description: 'Adds a small "Plus" sign next to the logo in the page header, so it is clear the site is changed by the extension.',
+    label: 'Přidat ikonku ➕ k logu v záhlaví webu (jako znamení, že je rozšíření zapnuto)',
 
     enhancePage(document) {
         const logoLink = document.querySelector('header a.navbar-brand');

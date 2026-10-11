@@ -21,7 +21,7 @@ function replaceProgram(program, original, features) {
         try {
             feature.renderProgram?.(program, layout, original);
         } catch (error) {
-            throw new Error(`${feature.page}/${feature.name}: ${error.message}`);
+            throw new Error(`${featureId(feature)}: ${error.message}`);
         }
     }
 
@@ -30,10 +30,36 @@ function replaceProgram(program, original, features) {
     layout.section.id = original.header.id;
     original.header.removeAttribute('id');
     original.header.before(layout.section);
+
+    hideShownFields(original, features);
+    // Fields of turned-off features stay as the site shows them, moved into the section so the program stays together.
+    for (const element of [original.labels, original.tableContainer]) {
+        if (element !== null && !isHiddenOriginal(element)) {
+            layout.section.append(element);
+        }
+    }
     for (const { element, parent } of layout.moves) {
         parent.append(element);
     }
-    for (const element of programElementsToHide(original)) {
-        element.classList.add('cvvz-hidden');
+}
+
+function hideShownFields(original, features) {
+    const shownFields = new Set([...PROGRAM_LAYOUT_FIELDS, ...features.flatMap((feature) => feature.shows ?? [])]);
+    for (const [field, element] of Object.entries(original.fields)) {
+        if (shownFields.has(field)) {
+            element.classList.add('cvvz-hidden');
+        }
     }
+
+    const fieldElements = Object.values(original.fields);
+    for (const wrapper of [original.detailsRow, original.tableContainer]) {
+        const wrapped = fieldElements.filter((element) => wrapper?.contains(element));
+        if (wrapper !== null && wrapped.every(isHiddenOriginal)) {
+            wrapper.classList.add('cvvz-hidden');
+        }
+    }
+}
+
+function isHiddenOriginal(element) {
+    return element.classList.contains('cvvz-hidden');
 }

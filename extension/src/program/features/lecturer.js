@@ -1,8 +1,8 @@
 registerFeature({
     page: 'program',
     name: 'lecturer',
-    description: 'Shows each lecturer on one line: the name opens the lecturer bio (as on the site), '
-        + 'followed by a link to search all programs of the lecturer.',
+    label: 'Odkaz na další programy lektora je na jednom řádku za jménem lektora',
+    shows: ['lecturers'],
 
     renderProgram(program, layout) {
         for (const lecturer of program.lecturers) {

@@ -37,7 +37,7 @@ test('every feature script and stylesheet is in the manifest, and every feature 
     }
 });
 
-test('every feature file registers one feature of its folder\'s page, named after the file, with a description', () => {
+test('every feature file registers one feature of its folder\'s page, named after the file, with a label', () => {
     for (const script of FEATURE_SCRIPTS) {
         const dom = createPage('<html><body></body></html>');
         runContentScripts(dom, ['src/shared/features.js', script]);
@@ -47,7 +47,7 @@ test('every feature file registers one feature of its folder\'s page, named afte
         assert.equal(others.length, 0, `${script} registers more than one feature`);
         assert.equal(feature.page, script.split('/')[1], `${script} is in the folder of another page`);
         assert.equal(feature.name, script.split('/').at(-1).replace('.js', ''));
-        assert.ok(feature.description.length > 20, `${script} needs a description`);
+        assert.ok(feature.label?.length > 10, `${script} needs a label for its switch in the options`);
     }
 });
 
@@ -67,6 +67,13 @@ test('a page changed by a previous run is left alone, as when the extension is r
     assert.equal(changedBefore.querySelector('.cvvz-logo-plus, .cvvz-program'), null);
 });
 
+test('features turned off in the options do not run', () => {
+    const { document, warnings } = enhancePage(HOMEPAGE, { url: 'https://www.cvvz.cz/', disabledFeatures: ['site/logo-plus'] });
+
+    assert.equal(document.querySelector('.cvvz-logo-plus'), null);
+    assert.deepEqual(warnings, []);
+});
+
 test('on other pages, only the site features run', () => {
     const { document, warnings } = enhancePage(HOMEPAGE, { url: 'https://www.cvvz.cz/' });
 
@@ -83,13 +90,23 @@ test('program features run only on the program page, also with a filter in the U
     assert.equal(filtered.querySelectorAll('section.cvvz-program').length, 110);
 });
 
+test('when the settings cannot be read, all features run as by default', () => {
+    const { document } = enhancePage(PROGRAM_PAGE, {
+        beforeEnhance: (window) => {
+            window.chrome.storage.sync.get = (defaults, callback) => callback(undefined);
+        },
+    });
+
+    assert.ok(document.querySelector('.cvvz-logo-plus'));
+    assert.equal(document.querySelectorAll('section.cvvz-program').length, 110);
+});
+
 test('a failing feature is reported in the console and the following features still run', () => {
     const { document, warnings } = enhancePage(HOMEPAGE, {
         url: 'https://www.cvvz.cz/',
         beforeEnhance: (window) => window.eval('FEATURES').unshift({
             page: 'site',
             name: 'broken',
-            description: 'Always fails.',
             enhancePage() {
                 throw new Error('boom');
             },

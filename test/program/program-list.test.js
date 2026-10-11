@@ -1,9 +1,17 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { enhancePage, findIncompletePrograms, readFixture } from '../helpers.js';
+import { enhancePage, FEATURE_SCRIPTS, findIncompletePrograms, readFixture } from '../helpers.js';
 
 const PAGE_2026 = readFixture('program-2026-10.html');
 const PAGE_2025 = readFixture('program-2025-11.html');
+
+const PROGRAM_FEATURE_IDS = FEATURE_SCRIPTS
+    .filter((file) => file.startsWith('src/program/'))
+    .map((file) => `program/${file.split('/').at(-1).replace('.js', '')}`);
+
+function isHidden(element) {
+    return element.classList.contains('cvvz-hidden');
+}
 
 function hiddenOriginals(original) {
     return [original.header, original.perex, original.labels, original.tableContainer];
@@ -50,7 +58,6 @@ test('a failing feature leaves its program untouched, including elements other f
         beforeEnhance: (window) => window.registerFeature({
             page: 'program',
             name: 'broken',
-            description: 'Fails for one program.',
             renderProgram(program) {
                 if (program.id === '644') {
                     throw new Error('boom');
@@ -69,9 +76,42 @@ test('a failing feature leaves its program untouched, including elements other f
     assert.deepEqual(structuredClone(warnings[0][1]), [{ id: 'program-644', reason: 'program/broken: boom' }]);
 });
 
+test('a turned-off feature leaves its field as the site shows it, inside the section before the dates', () => {
+    const { document, entries } = enhancePage(PAGE_2026, { disabledFeatures: ['program/description'] });
+    const { original } = entries[0];
+    const section = document.getElementById('program-644');
+
+    assert.equal(original.tableContainer.parentElement, section);
+    assert.equal(original.tableContainer.nextElementSibling, original.terms);
+    assert.equal(isHidden(original.tableContainer), false);
+    assert.equal(isHidden(original.fields.description), false);
+    assert.equal(isHidden(original.fields.lecturers), true);
+    assert.equal(isHidden(original.detailsRow), true, 'all rows in "Další podrobnosti" are shown by other features');
+    assert.equal(section.querySelector('.cvvz-description'), null);
+});
+
+test('the rows in "Další podrobnosti" stay visible only for the turned-off features', () => {
+    const { document, entries } = enhancePage(PAGE_2026, { disabledFeatures: ['program/labels'] });
+    const { original } = entries[0];
+
+    assert.equal(original.labels.parentElement, document.getElementById('program-644'));
+    assert.equal(isHidden(original.labels), false);
+    assert.equal(isHidden(original.detailsRow), false);
+    assert.equal(isHidden(original.fields.physicalLevel), false);
+    assert.equal(isHidden(original.fields.type), true, 'shown by the program-type feature');
+});
+
 for (const [name, html] of [['2026', PAGE_2026], ['2025', PAGE_2025]]) {
     test(`with all features, every section shows all information of its original block (${name})`, () => {
         const { document, entries } = enhancePage(html);
+
+        assert.deepEqual(findIncompletePrograms(document, entries), []);
+    });
+}
+
+for (const disabledFeatures of [...PROGRAM_FEATURE_IDS.map((id) => [id]), PROGRAM_FEATURE_IDS]) {
+    test(`with ${disabledFeatures.join(', ')} turned off, every section still shows all information`, () => {
+        const { document, entries } = enhancePage(PAGE_2026, { disabledFeatures });
 
         assert.deepEqual(findIncompletePrograms(document, entries), []);
     });

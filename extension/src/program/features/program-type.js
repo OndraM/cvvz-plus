@@ -10,8 +10,8 @@ const PROGRAM_TYPE_TAGS = {
 registerFeature({
     page: 'program',
     name: 'program-type',
-    description: 'Shows the program type (Provedení) as a tag with an emoji in the program header. '
-        + 'The type "Jiné" is not shown, as it says nothing; an unknown type is shown as it is.',
+    label: 'Zobrazit typ programu (provedení) jako štítek s emoji v záhlaví programu',
+    shows: ['type'],
 
     renderProgram(program, layout) {
         if (!program.type || program.type === 'Jiné') {

@@ -11,25 +11,27 @@ Funguje ve Firefoxu (i na Androidu) a v prohlížečích postavených na Chromiu
 
 Rozšíření je uděláno modulárně a rozšířitelně. 
 
-Každá úprava je samostatný modul ve složce stránky, kterou mění: `extension/src/<stránka>/features/`. Každý modul obsahuje své styly a testy.
+Každá úprava je samostatný modul ve složce stránky, kterou mění: `extension/src/<stránka>/features/`.
+Každý modul obsahuje své styly a testy.
+Každý modul jde vypnout v nastavení rozšíření.
 
 ***Celý web** (`site`, všechny stránky www.cvvz.cz):
 
-| Modul       | Co dělá                                                     |
-|-------------|-------------------------------------------------------------|
-| `logo-plus` | Přidá k logu v záhlaví malý nápis "Plus" (rozšíření běží). |
+| Modul       | Popis                                                                          |
+|-------------|--------------------------------------------------------------------------------|
+| `logo-plus` | Přidat ikonku ➕ k logu v záhlaví webu (jako znamení, že je rozšíření zapnuto) |
 
 **Stránka Program** (`program`, https://www.cvvz.cz/program):
 
-| Modul          | Co dělá                                                                                                                                                |
-|----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `filter-form`  | Odsadí filtr od seznamu programů.                                                                                                                      |
-| `program-type` | Zobrazí typ programu (provedení) jako štítek s emoji v záhlaví                                                                                         |
-| `permalink`    | Přidá po najetí myši odkaz 🔗 na program v záhlaví pro snazší sdíelní                                                                                  |
-| `labels`       | Z parametrů v "Další podrobnosti" udělá přehlednější štítky (fyzická náročnost, interakce, obtížnost, doplatek).                                       |
-| `lecturer`     | Odkaz na další programy lektora je na jednom řádku za jménem lektora.                                                                                  |
-| `description`  | Detailní popis programu je rovnou viditelný, ale zkrácený na 25 slov s tlačítkem "Více".                                                               |
-| `terms`        | Termíny jsou uvedeny rovnou jako seznam u programu, abychom se neuklikali (tj. místo aby byly schované v rozbalovacím menu až po kliknutí na tlačítko) |
+| Modul          | Popis                                                                                           |
+|----------------|-------------------------------------------------------------------------------------------------|
+| `program-type` | Zobrazit typ programu (provedení) jako štítek s emoji v záhlaví programu                        |
+| `labels`       | Zobrazit parametry programu jako štítky (místo ve schované tabulce)                             |
+| `lecturer`     | Odkaz na další programy lektora je na jednom řádku za jménem lektora                            |
+| `terms`        | Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí) |
+| `description`  | Detailní popis programu je rovnou viditelný (zkrácený na 25 slov s tlačítkem "Více")            |
+| `permalink`    | Přidat po najetí myší odkaz 🔗 na program v záhlaví pro snazší sdílení                          |
+| `filter-form`  | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
 
 ## Struktura
 
@@ -42,7 +44,8 @@ extension/
   src/program/layout.js            generátor základní kostry programu, na který jednotlivé moduly přidávají úpravy
   src/program/program-list.js      pro každý program postaví nový vzhled ze všech modulů a vymění ho za původní
   src/program/features/*.js|css    moduly stránky Program
-  src/main.js                      entrypoint, spustí moduly stránek, ke kterým patří aktuální URL (viz registr `PAGES`)
+  src/main.js                      entrypoint, spustí zapnuté moduly stránek, ke kterým patří aktuální URL (viz registr `PAGES`)
+  options/options.html|js|css      nastavení rozšíření: přepínač pro každý modul
 test/                              testy (Node.js + jsdom), kopírující strukturu modulů
 test/fixtures/                     uložené snapshoty stránek, které používají testy
 ```
@@ -55,6 +58,7 @@ Každý modul má v `page` uvedenou svou stránku. `main.js` pak podle URL spust
    Pokud parser narazí na cokoliv nečekaného (nový řádek tabulky, nový prvek...), program přeskočí. Při nenadálé změně HTML webu CVVZ by se tak nemělo nic rozbít, ale fallbacknout na původní verzi.
 2. `program-list.js` pro každý přečtený program vytvoří kostru (`createProgramLayout` z `layout.js`) a nechá postupně všechny moduly přidat své části (`renderProgram`).
 3. Když všechny moduly úspěšně doběhnou, vloží se nový `<section>` před původní blok v HTML a původní prvky jen skryje (třída `cvvz-hidden`).
+   Skryjí se jen řádky polí, které zobrazuje kostra nebo některý zapnutý modul (viz `shows`). Části vypnutých modulů zůstanou tak, jak je ukazuje web, přesunuté do `<section>`.
 4. Program, kterému parser nebo některý modul nerozumí, zůstane tak, jak ho vykreslil web v původním HTML. Do konzole browseru se pak vypíše důvod jako varování.
 
 Moduly běží v pořadí podle `manifest.json` a v tom pořadí se také zobrazují jejich části.
@@ -66,7 +70,8 @@ Moduly běží v pořadí podle `manifest.json` a v tom pořadí se také zobraz
    registerFeature({
        page: 'program',
        name: 'nazev',
-       description: 'Co úprava mění (anglicky).',
+       label: 'Popis funkce, který se zobrazuje v nastavení rozšíření (česky).',
+       shows: ['description'], // pro stránku Program: pole programu, která modul zobrazuje (jejich původní řádky se skryjí)
        renderProgram(program, layout, original) {
            // pro stránku Program: přidá prvky do layout.header nebo layout.section, na základě dat z `program`
        },
@@ -79,10 +84,11 @@ Moduly běží v pořadí podle `manifest.json` a v tom pořadí se také zobraz
    * Pomocná funkce `buildElement(tag, class, text)` vytvoří prvek (nepoužívat `innerHTML`).
    * Původní HTML prvek stránky nepřestavovat, ale přesunout přes `layout.moveOriginal(element, target)`.
 2. Pokud má feature nějaký styl, přidat do `extension/src/<stránka>/features/nazev.css`.
-3. Oba soubory přidat do `manifest.json`.
+3. Oba soubory přidat do `manifest.json` a skript i do `extension/options/options.html` (kvůli přepínači v nastavení rozšíření).
 4. Přidat test (`test/<stránka>/features/nazev.test.js`).
 
-Pro novou stránku webu: založit složku `extension/src/<stránka>/features/` a přidat stránku s podmínkou na URL do `PAGES` v `src/main.js`.
+Pro novou stránku webu: založit složku `extension/src/<stránka>/features/`, přidat stránku s podmínkou na URL do `PAGES` v `src/main.js`
+a její název do `OPTIONS_PAGE_TITLES` v `extension/options/options.js`.
 
 Základní test `test/main.test.js` hlídá, že každý modul je v manifestu, patří stránce své složky, má popis a test a že moduly běží jen na své stránce.
 Test `test/program/program-list.test.js` hlídá, že všechny moduly dohromady zobrazí všechny informace z původní stránky programu.

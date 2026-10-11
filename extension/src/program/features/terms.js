@@ -1,8 +1,7 @@
 registerFeature({
     page: 'program',
     name: 'terms',
-    description: 'Shows the program dates (termíny) as a list directly in the program instead of the '
-        + '"Zobrazit termíny programu" dropdown, or a message when the program has no dates yet.',
+    label: 'Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí)',
 
     renderProgram(program, layout, original) {
         if (original.terms === null) {

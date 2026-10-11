@@ -2,7 +2,9 @@
 //
 // parseProgramList(document) returns { entries: [{ program, original }], failures: [{ id, reason }] }:
 //   program  - plain data, see parseProgramBlock
-//   original - the program's elements on the page: { header, perex, labels, tableContainer, terms }
+//   original - the program's elements on the page: { header, perex, labels, tableContainer, terms },
+//              `fields`: the element each program field was read from (e.g. the table row of `type`),
+//              `detailsRow`: the "Další podrobnosti" row wrapping some of the field rows (2026), or null
 //
 // Parsing is strict: anything unexpected in a program block makes it fail, and the block then
 // stays in its original HTML, so the extension never hides information it does not understand.
@@ -36,7 +38,7 @@ function parseProgramBlock(header) {
         throw new Error(`unexpected header id "${header.id}"`);
     }
 
-    const original = { header, perex: null, labels: null, tableContainer: null, terms: null };
+    const original = { header, perex: null, labels: null, tableContainer: null, terms: null, detailsRow: null, fields: {} };
     for (const sibling of parseBlockSiblings(header)) {
         const kind = parseSiblingKind(sibling);
         if (kind === 'modal') {
@@ -52,6 +54,12 @@ function parseProgramBlock(header) {
     }
     if (original.tableContainer === null) {
         throw new Error('missing table container');
+    }
+    original.fields.title = header;
+    for (const field of ['perex', 'labels']) {
+        if (original[field] !== null) {
+            original.fields[field] = original[field];
+        }
     }
 
     const read = new Set(); // elements whose whole content the parser read into `program`
@@ -69,16 +77,14 @@ function parseProgramBlock(header) {
         surcharge: null,
         termCount: parseTermCount(original.terms),   // null when the program has no dates element
     };
-    parseTable(original.tableContainer, program, read);
+    parseTable(original, program, read);
 
-    for (const element of programElementsToHide(original)) {
-        parseCheckAllRead(element, read);
+    for (const element of [header, original.perex, original.labels, original.tableContainer]) {
+        if (element !== null) {
+            parseCheckAllRead(element, read);
+        }
     }
     return { program, original };
-}
-
-function programElementsToHide(original) {
-    return [original.header, original.perex, original.labels, original.tableContainer].filter(Boolean);
 }
 
 function parseBlockSiblings(header) {
@@ -143,9 +149,9 @@ function parseTermCount(termsRow) {
 
 // Handles both the flat table (2025) and rows nested in the "Další podrobnosti" collapse (2026),
 // because every row in the container is visited, however deep it is.
-function parseTable(tableContainer, program, read) {
+function parseTable(original, program, read) {
     const seenKeys = new Set();
-    for (const row of tableContainer.querySelectorAll('tr')) {
+    for (const row of original.tableContainer.querySelectorAll('tr')) {
         const cells = [...row.children];
         if (!cells.every((cell) => cell.tagName === 'TD')) {
             throw new Error('unexpected table row');
@@ -157,9 +163,16 @@ function parseTable(tableContainer, program, read) {
                 throw new Error(`duplicate row "${key}"`);
             }
             seenKeys.add(key);
-            parseDetailRow(key, cells[1], program, read);
+            original.fields[parseDetailRow(key, cells[1], program, read)] = row;
         } else if (cells.length === 1 && cells[0].colSpan === 2) {
-            parseCollapseRow(cells[0], program, read);
+            const field = parseCollapseRow(cells[0], program, read);
+            if (field !== null) {
+                original.fields[field] = row;
+            } else if (original.detailsRow === null) {
+                original.detailsRow = row;
+            } else {
+                throw new Error('duplicate "Další podrobnosti"');
+            }
         } else {
             throw new Error('unexpected table row');
         }
@@ -169,11 +182,14 @@ function parseTable(tableContainer, program, read) {
 function parseDetailRow(key, valueCell, program, read) {
     if (key === 'Lektor') {
         program.lecturers = parseLecturers(valueCell, read);
-    } else if (Object.hasOwn(PARSE_DETAIL_FIELDS, key)) {
-        program[PARSE_DETAIL_FIELDS[key]] = parseText(valueCell, read, `row "${key}"`);
-    } else {
-        throw new Error(`unknown row "${key}"`);
+        return 'lecturers';
     }
+    if (Object.hasOwn(PARSE_DETAIL_FIELDS, key)) {
+        const field = PARSE_DETAIL_FIELDS[key];
+        program[field] = parseText(valueCell, read, `row "${key}"`);
+        return field;
+    }
+    throw new Error(`unknown row "${key}"`);
 }
 
 // A collapsible row is either the description, or "Další podrobnosti", a wrapper of a nested
@@ -187,15 +203,21 @@ function parseCollapseRow(cell, program, read) {
     }
 
     const title = toggle.textContent.trim();
+    if (toggle.querySelector(PARSE_CONTENT_ELEMENTS) !== null) {
+        throw new Error(`unexpected element in "${title}"`);
+    }
+    read.add(toggle);
+    if (title === 'Další podrobnosti') {
+        return null;
+    }
     if (title === 'Detailní popis') {
         if (program.description !== null) {
             throw new Error('duplicate description');
         }
         program.description = parseText(content, read, 'description');
-    } else if (title !== 'Další podrobnosti') {
-        throw new Error(`unknown collapsible row "${title}"`);
+        return 'description';
     }
-    read.add(toggle);
+    throw new Error(`unknown collapsible row "${title}"`);
 }
 
 // The cell holds pairs of links: lecturer name (opens the bio modal) and "Zobrazit programy tohoto lektora".
@@ -218,7 +240,9 @@ function parseLecturers(cell, read) {
             programsUrl,
         });
         // Its text "Zobrazit programy tohoto lektora" is replaced by the lecturer feature.
-        read.add(programsLink);
+        if (parseText(programsLink, read, 'lecturer programs link') !== 'Zobrazit programy tohoto lektora') {
+            throw new Error('unexpected text of the lecturer programs link');
+        }
     }
     return lecturers;
 }

@@ -1,3 +1,5 @@
+const PROGRAM_LAYOUT_FIELDS = ['title', 'perex'];
+
 // The common layout of one program that all program features build on.
 // The title is a heading below the page's "Seznam programů" (h3), so screen reader users can jump between programs.
 // Features add their parts to `layout.header` or `layout.section`. The layout replaces the original
