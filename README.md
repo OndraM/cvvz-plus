@@ -33,6 +33,7 @@ Každý modul jde vypnout v nastavení rozšíření.
 | `term-capacity` | Upravit zobrazení volných míst a kapacity na srozumitelnější                                    |
 | `description`   | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
 | `permalink`     | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení            |
+| `program-count` | Zobrazit u nadpisu celkový počet vypsaných programů                                             |
 | `filter-form`   | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
 
 ## Struktura
