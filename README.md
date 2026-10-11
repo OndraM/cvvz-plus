@@ -29,8 +29,8 @@ Každý modul jde vypnout v nastavení rozšíření.
 | `labels`       | Zobrazit parametry programu jako štítky (místo ve schované tabulce)                             |
 | `lecturer`     | Odkaz na další programy lektora je na jednom řádku za jménem lektora                            |
 | `terms`        | Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí) |
-| `description`  | Detailní popis programu je rovnou viditelný (zkrácený na 25 slov s tlačítkem "Více")            |
-| `permalink`    | Přidat po najetí myší odkaz 🔗 na program v záhlaví pro snazší sdílení                          |
+| `description`  | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
+| `permalink`    | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení            |
 | `filter-form`  | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
 
 ## Struktura

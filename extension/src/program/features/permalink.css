@@ -1,13 +1,18 @@
 .cvvz-header .cvvz-permalink {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     margin-left: 8px;
     color: #fff;
     text-decoration: none;
+    vertical-align: -1px;
     opacity: 0;
     transition: opacity 0.15s ease-in-out;
 }
 
 .cvvz-header:hover .cvvz-permalink,
-.cvvz-header .cvvz-permalink:focus {
+.cvvz-header .cvvz-permalink:focus,
+.cvvz-header .cvvz-copied {
     opacity: 1;
 }
 
@@ -15,4 +20,24 @@
     .cvvz-header .cvvz-permalink {
         opacity: 1;
     }
+}
+
+.cvvz-header .cvvz-copied {
+    color: #fbd502;
+}
+
+.cvvz-permalink-check,
+.cvvz-permalink-done,
+.cvvz-copied .cvvz-permalink-link {
+    display: none;
+}
+
+.cvvz-copied .cvvz-permalink-check,
+.cvvz-copied .cvvz-permalink-done {
+    display: inline;
+}
+
+.cvvz-permalink-done {
+    font-size: 0.7em;
+    font-weight: 600;
 }

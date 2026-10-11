@@ -1,10 +1,15 @@
 .cvvz-no-terms {
-    color: #6c757d;
+    color: #8a8a8a;
+    font-size: 0.9em;
 }
 
 .cvvz-program > .row {
     margin-top: 0;
     margin-bottom: 20px;
+}
+
+.cvvz-program > .row:not(:has(.dropdown-menu li)) {
+    display: none;
 }
 
 .cvvz-program > .row > * {
@@ -48,4 +53,28 @@
 /* Overrides Bootstrap's .ms-auto, which is !important. */
 .cvvz-program .program-dates-dropdown .dropdown-item > form {
     margin-left: 0 !important;
+}
+
+@media (max-width: 575.98px) {
+    .cvvz-program .program-dates-dropdown .dropdown-menu .dropdown-item {
+        column-gap: 8px;
+    }
+
+    .cvvz-program .program-dates-dropdown .dropdown-menu .dropdown-item * {
+        font-size: 15px;
+    }
+
+    .cvvz-program .program-dates-dropdown .dropdown-menu .dropdown-item > span:first-child {
+        margin-right: 0;
+    }
+
+    .cvvz-program .program-dates-dropdown .dropdown-item > .align-items-center {
+        order: 1;
+        flex-basis: 100%;
+        margin-left: 0;
+    }
+
+    .cvvz-program .program-dates-dropdown .dropdown-item > form {
+        margin-left: auto !important;
+    }
 }

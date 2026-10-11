@@ -37,6 +37,7 @@
         "src/program/features/program-type.css",
         "src/program/features/permalink.css",
         "src/program/features/labels.css",
+        "src/program/features/lecturer.css",
         "src/program/features/description.css",
         "src/program/features/terms.css"
       ]

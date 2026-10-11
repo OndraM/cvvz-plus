@@ -9,7 +9,7 @@ test('shows the lecturer with a link to the bio and to all programs of the lectu
     const lecturer = document.getElementById('program-682').querySelector('.cvvz-lecturer');
     const [nameLink, programsLink] = lecturer.querySelectorAll('a');
 
-    assert.equal(lecturer.textContent, 'Lektor: Daniel Bartoš (🔍 Vyhledat všechny programy lektora)');
+    assert.equal(lecturer.textContent, '👤 Daniel Bartoš · další programy lektora');
     assert.equal(nameLink.dataset.bsToggle, 'modal');
     assert.equal(nameLink.dataset.bsTarget, '#lecturerBioModal-123');
     assert.equal(programsLink.getAttribute('href'), '/program?program_filter%5Blecturer%5D=Daniel%20Barto%C5%A1');

@@ -1,9 +1,10 @@
 .cvvz-description {
+    color: #5c5c5c;
     line-height: 1.4;
     white-space: pre-line;
 }
 
-.cvvz-truncated .cvvz-description-text {
+.cvvz-description-text {
     cursor: pointer;
 }
 

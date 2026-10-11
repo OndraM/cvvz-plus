@@ -12,11 +12,11 @@ registerFeature({
             nameLink.dataset.bsToggle = 'modal';
             nameLink.dataset.bsTarget = lecturer.bioModalTarget;
 
-            const programsLink = buildElement('a', '', '🔍 Vyhledat všechny programy lektora');
+            const programsLink = buildElement('a', 'cvvz-lecturer-programs', 'další programy lektora');
             programsLink.href = lecturer.programsUrl;
 
             const line = buildElement('p', 'cvvz-lecturer');
-            line.append(buildElement('strong', '', 'Lektor:'), ' ', nameLink, ' (', programsLink, ')');
+            line.append('👤 ', nameLink, ' · ', programsLink);
             layout.section.append(line);
         }
     },

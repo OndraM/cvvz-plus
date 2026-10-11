@@ -3,7 +3,7 @@ const DESCRIPTION_WORD_LIMIT = 25;
 registerFeature({
     page: 'program',
     name: 'description',
-    label: `Detailní popis programu je rovnou viditelný (zkrácený na ${DESCRIPTION_WORD_LIMIT} slov s tlačítkem "Více")`,
+    label: 'Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí',
     shows: ['description'],
 
     renderProgram(program, layout) {
@@ -33,12 +33,12 @@ function renderDescription(fullText, programId) {
 
     const setExpanded = (expanded) => {
         text.textContent = expanded ? fullText : shortText;
-        toggle.textContent = expanded ? '« Méně' : '» Více';
+        toggle.textContent = expanded ? '« Zkrátit popis' : '» Celý popis';
         toggle.setAttribute('aria-expanded', String(expanded));
-        paragraph.classList.toggle('cvvz-truncated', !expanded);
     };
-    toggle.addEventListener('click', () => setExpanded(toggle.getAttribute('aria-expanded') !== 'true'));
-    text.addEventListener('click', () => setExpanded(true));
+    const switchExpanded = () => setExpanded(toggle.getAttribute('aria-expanded') !== 'true');
+    toggle.addEventListener('click', switchExpanded);
+    text.addEventListener('click', switchExpanded);
     setExpanded(false);
 
     return paragraph;

@@ -65,11 +65,11 @@ export function textsOf(elements) {
 }
 
 // Words the extension deliberately replaces or hides: table headings, links it re-labels,
-// "Jiné" type, "znalosti" in the difficulty, and a zero surcharge.
+// "Jiné" type, the difficulty ("Základní znalosti" shows as "Pro začátečníky"), and a zero surcharge.
 const REPLACED_WORDS = new Set(wordsOf(`
     Lektor Detailní popis Další podrobnosti Zobrazit programy tohoto lektora
     Provedení Míra fyzického zapojení účastníků Míra náročnosti na interakci Úroveň obtížnosti programu
-    Doplatek na místě znalosti Rukodělná aktivita Pohybová aktivita Jiné 0
+    Doplatek na místě Základní znalosti Rukodělná aktivita Pohybová aktivita Jiné 0
 `));
 
 // Programs whose new section does not show all words of their original elements, as [{ id, missing: [words] }].
