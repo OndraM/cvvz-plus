@@ -28,6 +28,7 @@
         "src/program/features/lecturer.js",
         "src/program/features/description.js",
         "src/program/features/terms.js",
+        "src/program/features/program-card.js",
         "src/main.js"
       ],
       "css": [
@@ -39,7 +40,8 @@
         "src/program/features/labels.css",
         "src/program/features/lecturer.css",
         "src/program/features/description.css",
-        "src/program/features/terms.css"
+        "src/program/features/terms.css",
+        "src/program/features/program-card.css"
       ]
     }
   ],

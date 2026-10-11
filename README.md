@@ -25,6 +25,7 @@ Každý modul jde vypnout v nastavení rozšíření.
 
 | Modul          | Popis                                                                                           |
 |----------------|-------------------------------------------------------------------------------------------------|
+| `program-card` | Zobrazit každý program v ohraničené kartě                                                       |
 | `program-type` | Zobrazit typ programu (provedení) jako štítek s emoji v záhlaví programu                        |
 | `labels`       | Zobrazit parametry programu jako štítky (místo ve schované tabulce)                             |
 | `lecturer`     | Odkaz na další programy lektora je na jednom řádku za jménem lektora                            |
