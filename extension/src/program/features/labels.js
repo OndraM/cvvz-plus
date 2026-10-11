@@ -4,7 +4,7 @@ const LABELS_DIFFICULTIES = { 'Základní znalosti': 'Pro začátečníky', 'Pok
 registerFeature({
     page: 'program',
     name: 'labels',
-    label: 'Zobrazit parametry programu jako štítky (místo ve schované tabulce)',
+    label: 'Zobrazit parametry programu jako štítky (a ne ve schované tabulce)',
     shows: ['labels', 'physicalLevel', 'interactionLevel', 'difficulty', 'surcharge'],
 
     renderProgram(program, layout) {

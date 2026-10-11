@@ -1,6 +1,9 @@
 # CVVZ plus
 
-Neoficiální rozšíření prohlížeče, které zlepší UX a zpřehlední web [akce CVVZ](https://www.cvvz.cz/) (Celostátní vzájemná výměna zkušeností).
+Neoficiální rozšíření pro prohlížeče Firefox a Chrome, které zlepší zpřehlední web [akce CVVZ](https://www.cvvz.cz/) (Celostátní vzájemná výměna zkušeností),
+zlepší jeho použitelnost, UX a přidá některé nové funkce.
+
+![Program na původním webu a s rozšířením CVVZ plus](docs/cvvz-plus-promo-1280x800.png)
 
 Mimo jiné udělá kompaktnější a přehlednější stránku Program. Jednotlivé funkce jde v nastavení rozšíření samostatně vypnout.
 
@@ -27,14 +30,14 @@ Každý modul jde vypnout v nastavení rozšíření.
 
 | Modul           | Popis                                                                                           |
 |-----------------|-------------------------------------------------------------------------------------------------|
-| `program-card`  | Zobrazit každý program v ohraničené kartě                                                       |
+| `program-card`  | Zobrazit každý program v ohraničené kartě (pro lepší vizuální přehlednost)                      |
 | `program-type`  | Zobrazit typ programu (provedení) jako štítek s emoji v záhlaví programu                        |
-| `labels`        | Zobrazit parametry programu jako štítky (místo ve schované tabulce)                             |
+| `labels`        | Zobrazit parametry programu jako štítky (a ne ve schované tabulce)                              |
 | `lecturer`      | Odkaz na další programy lektora je na jednom řádku za jménem lektora                            |
 | `terms`         | Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí) |
 | `term-capacity` | Upravit zobrazení volných míst a kapacity na srozumitelnější                                    |
 | `description`   | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
-| `permalink`     | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení            |
+| `permalink`     | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení           |
 | `program-count` | Zobrazit u nadpisu celkový počet vypsaných programů                                             |
 | `filter-form`   | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
 
