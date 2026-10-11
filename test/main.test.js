@@ -5,6 +5,7 @@ import { CONTENT_SCRIPTS, createPage, enhancePage, FEATURE_SCRIPTS, manifest, re
 
 const PROGRAM_PAGE = readFixture('program-2026-10.html');
 const HOMEPAGE = readFixture('homepage-2026-10.html');
+const PARTICIPANTS_PAGE = readFixture('participants-2026-10.html');
 const SRC_DIR = new URL('../extension/src/', import.meta.url);
 
 const PAGE_DIRS = readdirSync(SRC_DIR, { withFileTypes: true })
@@ -88,6 +89,16 @@ test('program features run only on the program page, also with a filter in the U
 
     const filtered = enhancePage(PROGRAM_PAGE, { url: 'https://www.cvvz.cz/program?program_filter%5Btype%5D=workshop' }).document;
     assert.equal(filtered.querySelectorAll('section.cvvz-program').length, 110);
+});
+
+test('participant features run only on the participant page, also with a filter in the URL', () => {
+    const elsewhere = enhancePage(PARTICIPANTS_PAGE, { url: 'https://www.cvvz.cz/' });
+    assert.equal(elsewhere.document.querySelector('.cvvz-compact-table, .cvvz-contacts'), null);
+    assert.deepEqual(elsewhere.warnings, []);
+
+    const filtered = enhancePage(PARTICIPANTS_PAGE, { url: 'https://www.cvvz.cz/prihlaseni-ucastnici?event_registration_filter%5Bcity%5D=Brno' });
+    assert.ok(filtered.document.querySelector('.cvvz-compact-table .cvvz-contacts'));
+    assert.deepEqual(filtered.warnings, []);
 });
 
 test('when the settings cannot be read, all features run as by default', () => {

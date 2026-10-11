@@ -1,9 +1,5 @@
 /* Common layout of a program section. Styles of individual features live next to them in features/. */
 
-.cvvz-hidden {
-    display: none !important;
-}
-
 .cvvz-program {
     margin-top: 2em;
 }

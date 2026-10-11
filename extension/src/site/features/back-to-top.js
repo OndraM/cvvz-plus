@@ -1,7 +1,7 @@
 registerFeature({
-    page: 'program',
+    page: 'site',
     name: 'back-to-top',
-    label: 'Přidat na mobilu tlačítko pro návrat nahoru',
+    label: 'Přidat na mobilu tlačítko pro odscrollování zpět nahoru',
 
     enhancePage(document) {
         const button = buildElement('button', 'cvvz-back-to-top', '↑ Nahoru');

@@ -34,7 +34,7 @@ test('shows a switch for every feature, grouped by page, all on by default', () 
     const { document } = openOptions();
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
-    assert.deepEqual(textsOf(document.querySelectorAll('legend')), ['Celý web', 'Stránka Program']);
+    assert.deepEqual(textsOf(document.querySelectorAll('legend')), ['Celý web', 'Stránka Program', 'Stránka Přihlášení účastníci']);
     assert.equal(checkboxes.length, FEATURE_SCRIPTS.length);
     assert.deepEqual(uncheckedFeatures(document), []);
     assert.equal(checkboxes[0].value, 'site/logo-plus');

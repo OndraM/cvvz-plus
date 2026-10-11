@@ -1,0 +1,67 @@
+/* The site pads each row by 40px, so only a few participants fit on a screen. */
+.table-container.cvvz-compact-table thead th {
+    padding: 8px;
+}
+
+.table-container.cvvz-compact-table tbody td {
+    padding: 6px 8px;
+}
+
+.table-container.cvvz-compact-table tbody tr:nth-child(even) > td {
+    background-color: #faf7f2;
+}
+
+.cvvz-compact-table .cvvz-organization {
+    min-width: 16em;
+}
+
+.cvvz-compact-table th.cvvz-facebook {
+    min-width: 6em;
+}
+
+.cvvz-compact-table td.cvvz-facebook {
+    overflow-wrap: anywhere;
+}
+
+.cvvz-compact-table .cvvz-full-name {
+    font-weight: 600;
+}
+
+.cvvz-compact-table .cvvz-nickname {
+    display: block;
+    color: #6c757d;
+    font-size: 0.875em;
+}
+
+.cvvz-compact-table .cvvz-paid,
+.cvvz-compact-table .cvvz-unpaid {
+    font-size: 1.25em;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.cvvz-compact-table .cvvz-paid {
+    color: #198754;
+}
+
+.cvvz-compact-table .cvvz-unpaid {
+    color: #b02a37;
+}
+
+@media (max-width: 767.98px) {
+    .table-container.cvvz-compact-table table {
+        font-size: 0.875em;
+    }
+
+    .cvvz-compact-table .cvvz-organization {
+        min-width: 12em;
+    }
+
+    /* The table does not fit a phone: the name stays in view while scrolling it sideways. */
+    .table-container.cvvz-compact-table .cvvz-name {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        box-shadow: inset -1px 0 0 #dadada;
+    }
+}

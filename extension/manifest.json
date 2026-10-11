@@ -18,6 +18,7 @@
       "js": [
         "src/shared/features.js",
         "src/site/features/logo-plus.js",
+        "src/site/features/back-to-top.js",
         "src/program/parse.js",
         "src/program/layout.js",
         "src/program/program-list.js",
@@ -31,11 +32,15 @@
         "src/program/features/program-card.js",
         "src/program/features/term-capacity.js",
         "src/program/features/program-count.js",
-        "src/program/features/back-to-top.js",
+        "src/participants/table.js",
+        "src/participants/features/compact-table.js",
+        "src/participants/features/contacts.js",
         "src/main.js"
       ],
       "css": [
+        "src/shared/features.css",
         "src/site/features/logo-plus.css",
+        "src/site/features/back-to-top.css",
         "src/program/layout.css",
         "src/program/features/filter-form.css",
         "src/program/features/program-type.css",
@@ -47,7 +52,8 @@
         "src/program/features/program-card.css",
         "src/program/features/term-capacity.css",
         "src/program/features/program-count.css",
-        "src/program/features/back-to-top.css"
+        "src/participants/features/compact-table.css",
+        "src/participants/features/contacts.css"
       ]
     }
   ],

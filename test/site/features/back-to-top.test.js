@@ -5,7 +5,7 @@ import { enhancePage, readFixture } from '../../helpers.js';
 function openPage() {
     const scrolls = [];
     const { window, document } = enhancePage(readFixture('program-2026-10.html'), {
-        features: ['src/program/features/back-to-top.js'],
+        features: ['src/site/features/back-to-top.js'],
         beforeEnhance: (window) => {
             window.scrollTo = (x, y) => scrolls.push([x, y]);
         },

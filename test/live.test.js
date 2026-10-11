@@ -1,5 +1,5 @@
 // Checks the extension against the current live page (needs network): npm run test:live
-// When it fails, the site HTML changed: save the page as a new fixture (see README) and adjust the parser.
+// When it fails, the site HTML changed: save the page as a new fixture (see README) and adjust the parser or the features.
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -17,4 +17,18 @@ test('the extension understands every program on the live page and shows all its
     assert.ok(entries.length > 0, 'no programs found');
     assert.deepEqual(findIncompletePrograms(document, entries), []);
     console.log(`Checked ${entries.length} programs on ${PROGRAM_URL}`);
+});
+
+const PARTICIPANTS_URL = 'https://www.cvvz.cz/prihlaseni-ucastnici';
+
+test('the extension understands the live participant list', async () => {
+    const response = await fetch(PARTICIPANTS_URL);
+    assert.equal(response.status, 200);
+
+    const { document, warnings } = enhancePage(await response.text(), { url: PARTICIPANTS_URL });
+
+    assert.deepEqual(warnings.map(([, failures]) => structuredClone(failures)), [], 'some features failed');
+    const rows = document.querySelectorAll('.cvvz-compact-table tbody tr');
+    assert.ok(rows.length > 0, 'no participants found');
+    console.log(`Checked ${rows.length} participants on ${PARTICIPANTS_URL}`);
 });

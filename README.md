@@ -1,7 +1,8 @@
 # CVVZ plus
 
-Neoficiální rozšíření prohlížeče, které zlepší UX a zpřehlední web [akce CVVZ](https://www.cvvz.cz/) (Celostátní vzájemná výměna zkušeností),
-zejména pak udělá kompaktnější a přehlednější stránku Program.
+Neoficiální rozšíření prohlížeče, které zlepší UX a zpřehlední web [akce CVVZ](https://www.cvvz.cz/) (Celostátní vzájemná výměna zkušeností).
+
+Mimo jiné udělá kompaktnější a přehlednější stránku Program. Jednotlivé funkce jde v nastavení rozšíření samostatně vypnout.
 
 Funguje ve Firefoxu (i na Androidu) a v prohlížečích postavených na Chromiu (Chrome, Edge, Brave, Opera...).
 
@@ -15,11 +16,12 @@ Každá úprava je samostatný modul ve složce stránky, kterou mění: `extens
 Každý modul obsahuje své styly a testy.
 Každý modul jde vypnout v nastavení rozšíření.
 
-***Celý web** (`site`, všechny stránky www.cvvz.cz):
+**Celý web** (`site`, všechny stránky www.cvvz.cz):
 
-| Modul       | Popis                                                                          |
-|-------------|--------------------------------------------------------------------------------|
-| `logo-plus` | Přidat ikonku ➕ k logu v záhlaví webu (jako znamení, že je rozšíření zapnuto) |
+| Modul         | Popis                                                                          |
+|---------------|--------------------------------------------------------------------------------|
+| `logo-plus`   | Přidat ikonku ➕ k logu v záhlaví webu (jako znamení, že je rozšíření zapnuto) |
+| `back-to-top` | Přidat na mobilu tlačítko pro odscrollování zpět nahoru                        |
 
 **Stránka Program** (`program`, https://www.cvvz.cz/program):
 
@@ -34,20 +36,28 @@ Každý modul jde vypnout v nastavení rozšíření.
 | `description`   | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
 | `permalink`     | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení            |
 | `program-count` | Zobrazit u nadpisu celkový počet vypsaných programů                                             |
-| `back-to-top`   | Přidat na mobilu tlačítko pro návrat nahoru                                                     |
 | `filter-form`   | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
+
+**Stránka Přihlášení účastníci** (`participants`, https://www.cvvz.cz/prihlaseni-ucastnici):
+
+| Modul           | Popis                                                          |
+|-----------------|----------------------------------------------------------------|
+| `compact-table` | Kompaktnější tabulka (nižší řádky, upravené šířky sloupců aj.) |
+| `contacts`      | Zobrazit FB, telefon a e-mail v jednom sloupci jako ikonky     |
 
 ## Struktura
 
 ```
 extension/
   manifest.json                    manifest rozšíření (jeden pro všechny browsery)
-  src/shared/features.js           registr modulů (registerFeature)
+  src/shared/features.js|css       registr modulů (registerFeature) a společné styly
   src/site/features/*.js|css       moduly pro všechny stránky webu
   src/program/parse.js             parser programů ze stránky do interního datového modelu
   src/program/layout.js            generátor základní kostry programu, na který jednotlivé moduly přidávají úpravy
   src/program/program-list.js      pro každý program postaví nový vzhled ze všech modulů a vymění ho za původní
   src/program/features/*.js|css    moduly stránky Program
+  src/participants/table.js        tabulka účastníků
+  src/participants/features/*.js|css  moduly stránky Přihlášení účastníci
   src/main.js                      entrypoint, spustí zapnuté moduly stránek, ke kterým patří aktuální URL (viz registr `PAGES`)
   options/options.html|js|css      nastavení rozšíření: přepínač pro každý modul
 test/                              testy (Node.js + jsdom), kopírující strukturu modulů
@@ -66,6 +76,11 @@ Každý modul má v `page` uvedenou svou stránku. `main.js` pak podle URL spust
 4. Program, kterému parser nebo některý modul nerozumí, zůstane tak, jak ho vykreslil web v původním HTML. Do konzole browseru se pak vypíše důvod jako varování.
 
 Moduly běží v pořadí podle `manifest.json` a v tom pořadí se také zobrazují jejich části.
+
+### Stránka Přihlášení účastníci
+
+Moduly upravují přímo tabulku webu (`enhancePage`). Buňky skrývají (třída `cvvz-hidden`), přesouvají nebo mění jejich obsah.
+Pokud web změní v HTML sloupce tabulky, moduly ji nechají v původní podobě a do konzole se vypíše varování.
 
 ### Přidání nové úpravy
 
@@ -138,3 +153,6 @@ npm run lint        # kontrola rozšíření validátorem addons.mozilla.org
 * `test:live` pouštět pokud se zdá, že se web změnil. Když selže, vypíše, které programy a proč rozšíření nepoznalo. Pak je třeba
   1. Uložit aktuální stránku jako novou fixture: `curl -o test/fixtures/program-RRRR-MM.html https://www.cvvz.cz/program`
   2. Upravit `src/program/parse.js` (případně modul) a přidat test nad novou fixture.
+* Stránka Přihlášení účastníci obsahuje osobní údaje, do repozitáře se proto nesmí uložit tak, jak je.
+  Fixture se vytvoří skriptem, který stáhne aktuální stránku a skutečné účastníky nahradí vymyšlenými:
+  `node test/make-participants-fixture.js > test/fixtures/participants-RRRR-MM.html`
