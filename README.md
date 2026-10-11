@@ -23,16 +23,17 @@ Každý modul jde vypnout v nastavení rozšíření.
 
 **Stránka Program** (`program`, https://www.cvvz.cz/program):
 
-| Modul          | Popis                                                                                           |
-|----------------|-------------------------------------------------------------------------------------------------|
-| `program-card` | Zobrazit každý program v ohraničené kartě                                                       |
-| `program-type` | Zobrazit typ programu (provedení) jako štítek s emoji v záhlaví programu                        |
-| `labels`       | Zobrazit parametry programu jako štítky (místo ve schované tabulce)                             |
-| `lecturer`     | Odkaz na další programy lektora je na jednom řádku za jménem lektora                            |
-| `terms`        | Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí) |
-| `description`  | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
-| `permalink`    | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení            |
-| `filter-form`  | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
+| Modul           | Popis                                                                                           |
+|-----------------|-------------------------------------------------------------------------------------------------|
+| `program-card`  | Zobrazit každý program v ohraničené kartě                                                       |
+| `program-type`  | Zobrazit typ programu (provedení) jako štítek s emoji v záhlaví programu                        |
+| `labels`        | Zobrazit parametry programu jako štítky (místo ve schované tabulce)                             |
+| `lecturer`      | Odkaz na další programy lektora je na jednom řádku za jménem lektora                            |
+| `terms`         | Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí) |
+| `term-capacity` | Upravit zobrazení volných míst a kapacity na srozumitelnější                                    |
+| `description`   | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
+| `permalink`     | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení            |
+| `filter-form`   | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
 
 ## Struktura
 
