@@ -34,6 +34,7 @@ Každý modul jde vypnout v nastavení rozšíření.
 | `description`   | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
 | `permalink`     | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení            |
 | `program-count` | Zobrazit u nadpisu celkový počet vypsaných programů                                             |
+| `back-to-top`   | Přidat na mobilu tlačítko pro návrat nahoru                                                     |
 | `filter-form`   | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
 
 ## Struktura

@@ -31,6 +31,7 @@
         "src/program/features/program-card.js",
         "src/program/features/term-capacity.js",
         "src/program/features/program-count.js",
+        "src/program/features/back-to-top.js",
         "src/main.js"
       ],
       "css": [
@@ -45,7 +46,8 @@
         "src/program/features/terms.css",
         "src/program/features/program-card.css",
         "src/program/features/term-capacity.css",
-        "src/program/features/program-count.css"
+        "src/program/features/program-count.css",
+        "src/program/features/back-to-top.css"
       ]
     }
   ],

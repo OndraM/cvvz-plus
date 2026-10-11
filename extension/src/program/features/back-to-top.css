@@ -1,0 +1,20 @@
+.cvvz-back-to-top {
+    display: none;
+    position: fixed;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    z-index: 1040;
+    padding: 9px 16px;
+    border: 0;
+    border-radius: 999px;
+    background: #7b4a1e;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 991.98px) {
+    .cvvz-back-to-top-visible {
+        display: block;
+    }
+}
