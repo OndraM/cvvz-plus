@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  push:
+    tags: ['*.*.*']
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      - name: Check that the tag matches the manifest version
+        run: test "$(jq -r .version extension/manifest.json)" = "$GITHUB_REF_NAME"
+      - run: npm test
+      - run: npm run test:live
+      - run: npm run lint
+      - run: npm run build
+      - run: gh release create "$GITHUB_REF_NAME" web-ext-artifacts/*.zip --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  firefox:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      # Only submits the version; AMO publishes it after the review, which may take days.
+      - run: npx web-ext sign --source-dir extension --channel listed --approval-timeout 0
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.AMO_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.AMO_API_SECRET }}
+
+#  chrome:
+#    needs: release
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v7
+#      - uses: actions/setup-node@v7
+#        with:
+#          node-version: 26
+#      - run: npx chrome-webstore-upload-cli@4.0.2 --source extension
+#        env:
+#          EXTENSION_ID: ebopjaeofoelbmaecpdpkkecbakclbnd
+#          PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
+#          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+#          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+#          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}

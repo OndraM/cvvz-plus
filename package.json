@@ -11,7 +11,8 @@
     "start": "web-ext run --source-dir extension --start-url https://www.cvvz.cz/program",
     "start:android": "web-ext run --target firefox-android --source-dir extension",
     "lint": "web-ext lint --source-dir extension",
-    "build": "web-ext build --source-dir extension --overwrite-dest"
+    "build": "web-ext build --source-dir extension --overwrite-dest",
+    "release": "scripts/release.sh"
   },
   "devDependencies": {
     "jsdom": "^30.1.2",
