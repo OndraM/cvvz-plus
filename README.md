@@ -1,5 +1,8 @@
 # CVVZ plus
 
+[![Přidat do Firefoxu](https://img.shields.io/badge/P%C5%99idat_do_Firefoxu-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/cs/firefox/addon/cvvz-plus/)
+[![Přidat do Chromu](https://img.shields.io/badge/P%C5%99idat_do_Chromu-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/cvvz-plus/ebopjaeofoelbmaecpdpkkecbakclbnd)
+
 Neoficiální rozšíření pro prohlížeče Firefox a Chrome, které zlepší zpřehlední web [akce CVVZ](https://www.cvvz.cz/) (Celostátní vzájemná výměna zkušeností),
 zlepší jeho použitelnost, UX a přidá některé nové funkce.
 
