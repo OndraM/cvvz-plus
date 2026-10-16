@@ -1,0 +1,330 @@
+/* The grid of 5-minute slots is set up by timeline.js: --timeline-slots of the shared time axis (wide screen),
+   --timeline-day-slots of each day (phone), and on each block its --timeline-columns and --timeline-rows in them
+   and --timeline-lane, its place among the blocks at the same time. */
+
+.cvvz-timeline {
+    margin-top: 16px;
+}
+
+.cvvz-timeline + .table-container {
+    margin-top: 32px;
+}
+
+.cvvz-timeline-days {
+    display: grid;
+    gap: 8px;
+}
+
+.cvvz-timeline-day-name {
+    font-weight: 700;
+}
+
+.cvvz-timeline-day-name small {
+    display: block;
+    color: #6c757d;
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+.cvvz-timeline-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+    margin: 2px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+}
+
+.cvvz-timeline-time {
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.cvvz-timeline-program {
+    background: #7b4a1e;
+    color: #fff;
+}
+
+.cvvz-timeline-program .cvvz-timeline-time {
+    padding-right: 22px;
+    opacity: 0.85;
+}
+
+/* Leaves room for the unregister button. */
+.cvvz-timeline-program .cvvz-timeline-title {
+    padding-right: 22px;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.cvvz-timeline-program .cvvz-timeline-title:hover {
+    text-decoration: underline;
+}
+
+.cvvz-timeline-place {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.cvvz-timeline-place::before {
+    content: "";
+    flex: none;
+    width: 0.8em;
+    height: 0.8em;
+    background: currentColor;
+    mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6'/></svg>") center / contain no-repeat;
+}
+
+.cvvz-timeline-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    font-size: 0.75rem;
+}
+
+.cvvz-timeline-surcharge {
+    padding: 0 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+}
+
+.cvvz-timeline-unregister {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+
+/* The copy of the site's button, with its trash icon in the color of the block. */
+.cvvz-timeline-unregister button {
+    display: block;
+    padding: 2px !important;
+    line-height: 0;
+}
+
+.cvvz-timeline-unregister svg {
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+}
+
+.cvvz-timeline-free {
+    border: 1.5px dashed #c9b39c;
+    background: #fff;
+    color: #6c757d;
+}
+
+.cvvz-timeline-free a {
+    color: #7b4a1e;
+    font-weight: 700;
+}
+
+/* A free block at the time of a registered program: as small as its one line of text. */
+.cvvz-timeline-block.cvvz-timeline-aside {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    padding: 0 4px;
+    border-width: 1px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0.55;
+}
+
+.cvvz-timeline-now {
+    position: relative;
+    z-index: 1;
+    background: #ed1b2e;
+    pointer-events: none;
+}
+
+.cvvz-timeline-now span {
+    position: absolute;
+    padding: 0 4px;
+    border-radius: 4px;
+    background: #ed1b2e;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* Wide screen: a row of each day, all on one time axis, 2 px a minute, scrolling sideways. */
+@media (min-width: 768px) {
+    .cvvz-timeline-scroller {
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+
+    .cvvz-timeline-days {
+        width: max-content;
+    }
+
+    .cvvz-timeline-day,
+    .cvvz-timeline-hours {
+        display: grid;
+        grid-template-columns: 96px auto;
+        column-gap: 8px;
+    }
+
+    /* Stays in place when the days scroll. */
+    .cvvz-timeline-day-name {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #fff;
+    }
+
+    .cvvz-timeline-track,
+    .cvvz-timeline-hours-track {
+        display: grid;
+        grid-template-columns: repeat(var(--timeline-slots), 10px);
+    }
+
+    /* Lanes of blocks at the same time are one below another, the free blocks aside last, one line high. */
+    .cvvz-timeline-track {
+        grid-template-rows: repeat(var(--timeline-lanes), minmax(120px, auto)) auto;
+        background: repeating-linear-gradient(90deg, #efe9e2 0 1px, transparent 1px 120px);
+    }
+
+    .cvvz-timeline-hours-track span {
+        grid-column: var(--timeline-columns);
+        justify-self: start;
+        transform: translateX(-50%);
+        color: #6c757d;
+        font-size: 0.75rem;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Not under the names of the days. */
+    .cvvz-timeline-hours-track span:first-child {
+        transform: none;
+    }
+
+    .cvvz-timeline-hour {
+        display: none;
+    }
+
+    .cvvz-timeline-block {
+        grid-column: var(--timeline-columns);
+        grid-row: var(--timeline-lane);
+    }
+
+    .cvvz-timeline-now {
+        grid-column: var(--timeline-columns);
+        grid-row: 1 / -1;
+        width: 2px;
+        margin-left: calc(var(--timeline-slot-part) * 10px - 1px);
+        /* Scrolled to with an hour before it in view. All days usually fit on the screen, so the page
+           moves only when the day is in the lower half, to have it in the middle. */
+        scroll-margin: 50vh 0 0 230px;
+    }
+
+    .cvvz-timeline-now span {
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* Phone: the days one below another, time running down, 1.5 px a minute. */
+@media (max-width: 767.98px) {
+    .cvvz-timeline-days {
+        gap: 24px;
+    }
+
+    .cvvz-timeline-hours {
+        display: none;
+    }
+
+    .cvvz-timeline-day-name {
+        margin-bottom: 8px;
+    }
+
+    .cvvz-timeline-day-name small {
+        display: inline;
+        margin-left: 6px;
+    }
+
+    /* Lanes of blocks at the same time are side by side, the free blocks aside last, one line wide.
+       A block that needs more room than its time stretches its slots, and the rest of the day moves down. */
+    .cvvz-timeline-track {
+        display: grid;
+        grid-template-rows: repeat(var(--timeline-day-slots), minmax(7.5px, auto));
+        grid-template-columns: repeat(var(--timeline-lanes), minmax(0, 1fr)) auto;
+        padding-left: 44px;
+    }
+
+    .cvvz-timeline-hour {
+        position: relative;
+        grid-row: var(--timeline-rows);
+        grid-column: 1 / -1;
+        border-top: 1px solid #efe9e2;
+    }
+
+    .cvvz-timeline-hour span {
+        position: absolute;
+        top: -0.65em;
+        left: -44px;
+        color: #6c757d;
+        font-size: 0.75rem;
+        line-height: 1.3;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .cvvz-timeline-block {
+        grid-row: var(--timeline-rows);
+        grid-column: var(--timeline-lane);
+    }
+
+    .cvvz-timeline-block.cvvz-timeline-aside {
+        padding: 4px 0;
+        writing-mode: vertical-rl;
+    }
+
+    .cvvz-timeline-counts {
+        display: none;
+    }
+
+    .cvvz-timeline-now {
+        grid-row: var(--timeline-rows);
+        grid-column: 1 / -1;
+        align-self: start;
+        height: 2px;
+        margin-top: calc(var(--timeline-slot-part) * 7.5px - 1px);
+        /* Scrolled to with a bit of the current program in view, below the site's header. */
+        scroll-margin-top: 220px;
+    }
+
+    .cvvz-timeline-now span {
+        top: -0.65em;
+        left: -44px;
+        line-height: 1.3;
+    }
+}
+
+@media print {
+    .cvvz-timeline {
+        display: none;
+    }
+
+    .cvvz-timeline + .table-container.cvvz-hidden {
+        display: block !important;
+    }
+}

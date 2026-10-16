@@ -5,6 +5,7 @@ const PAGES = {
     site: () => true,
     program: (location) => location.pathname === '/program',
     participants: (location) => location.pathname === '/prihlaseni-ucastnici',
+    'my-programs': (location) => location.pathname === '/moje-programy',
 };
 
 function runFeatures() {

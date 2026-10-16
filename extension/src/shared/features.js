@@ -42,3 +42,10 @@ function buildElement(tagName, className, text = '') {
     element.textContent = text;
     return element;
 }
+
+// The sign of the extension, as next to the site's logo, on what the extension added and is not a part of the site.
+function buildPlusBadge() {
+    const plus = buildElement('span', 'cvvz-plus cvvz-plus-badge');
+    plus.title = 'Přidáno rozšířením CVVZ plus';
+    return plus;
+}

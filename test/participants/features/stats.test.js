@@ -96,7 +96,7 @@ test('leaves the menu and the footer as the site shows them when the feature is 
 
 test('adds a tab with the statistics next to the list, with the list open', () => {
     const { document, warnings } = enhancePage(PAGE, { url: URL, features: FEATURE });
-    const tabs = document.querySelectorAll('.cvvz-stats-tab');
+    const tabs = document.querySelectorAll('.cvvz-tab');
 
     assert.deepEqual(warnings, []);
     assert.deepEqual(textsOf(tabs), ['Seznam účastníků9', 'Statistiky']);
@@ -109,14 +109,14 @@ test('adds a tab with the statistics next to the list, with the list open', () =
 test('opens the statistics from the link', () => {
     const { document } = enhancePage(PAGE, { url: STATS_URL, features: FEATURE });
 
-    assert.equal(document.querySelector('.cvvz-stats-tab[aria-selected="true"]').textContent, 'Statistiky');
+    assert.equal(document.querySelector('.cvvz-tab[aria-selected="true"]').textContent, 'Statistiky');
     assert.equal(document.querySelector('.cvvz-stats').classList.contains('cvvz-hidden'), false);
     assert.ok(document.querySelector('.table-container').closest('.cvvz-hidden'));
 });
 
 test('switches the tabs and keeps the open one in the URL, with the filter', () => {
     const { window, document } = enhancePage(PAGE, { url: `${URL}?event_registration_filter%5Bcity%5D=Brno`, features: FEATURE });
-    const [listTab, statsTab] = document.querySelectorAll('.cvvz-stats-tab');
+    const [listTab, statsTab] = document.querySelectorAll('.cvvz-tab');
 
     statsTab.click();
     assert.equal(window.location.search, '?event_registration_filter%5Bcity%5D=Brno');
@@ -265,6 +265,6 @@ test('works together with the other participant features, which change the table
 test('leaves the page as the site shows it when it does not understand the paid column', () => {
     const { document, warnings } = enhancePage(PAGE.replace('<td>Ano</td>', '<td>Možná</td>'), { url: STATS_URL, features: FEATURE });
 
-    assert.equal(document.querySelector('.cvvz-stats, .cvvz-stats-tabs, .cvvz-hidden'), null);
+    assert.equal(document.querySelector('.cvvz-stats, .cvvz-tabs, .cvvz-hidden'), null);
     assert.equal(warnings[0][1][0].reason, 'unexpected paid value: Možná');
 });
