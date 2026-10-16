@@ -1,3 +1,7 @@
+.table-container.cvvz-compact-table {
+    container-type: inline-size;
+}
+
 /* The site pads each row by 40px, so only a few participants fit on a screen. */
 .table-container.cvvz-compact-table thead th {
     padding: 8px;
@@ -48,7 +52,7 @@
     color: #b02a37;
 }
 
-@media (max-width: 767.98px) {
+@container (max-width: 600px) {
     .table-container.cvvz-compact-table table {
         font-size: 0.875em;
     }
@@ -57,7 +61,7 @@
         min-width: 12em;
     }
 
-    /* The table does not fit a phone: the name stays in view while scrolling it sideways. */
+    /* The table does not fit: the name stays in view while scrolling it sideways. */
     .table-container.cvvz-compact-table .cvvz-name {
         position: sticky;
         left: 0;

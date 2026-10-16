@@ -16,14 +16,18 @@ const PARTICIPANT_COLUMNS = {
     paid: 'Zaplaceno',
 };
 
-// The first call checks the headings, before any feature changes them, and marks each cell with the key
-// of its column, so features find the cells also after others moved them. When the site changed the columns,
-// it throws, so the features leave the table as the site shows it.
 function findParticipantTable(document) {
     const table = document.querySelector('.table-container > table');
     if (!table) {
         throw new Error('participant table not found');
     }
+    return markParticipantTable(table);
+}
+
+// The first call checks the headings, before any feature changes them, and marks each cell with the key
+// of its column, so features find the cells also after others moved them. When the site changed the columns,
+// it throws, so the features leave the table as the site shows it.
+function markParticipantTable(table) {
     if (!table.classList.contains('cvvz-participants')) {
         const headings = [...table.querySelectorAll('thead th')].map((heading) => heading.textContent.trim()).join(', ');
         if (headings !== Object.values(PARTICIPANT_COLUMNS).join(', ')) {
@@ -38,6 +42,24 @@ function findParticipantTable(document) {
         table.classList.add('cvvz-participants');
     }
     return table;
+}
+
+// The site adds the modal with the participants of a program's term only after a click on its capacity, with a table
+// of the registered participants and possibly another of those watching for a free place. That is after main.js ran,
+// so failures are reported here.
+function watchParticipantModals(document, feature, enhanceTable) {
+    new MutationObserver((mutations) => {
+        const modals = mutations.flatMap((mutation) => [...mutation.addedNodes]).filter((node) => node.matches?.('.modal'));
+        for (const modal of modals) {
+            try {
+                for (const table of modal.querySelectorAll('.table-container > table')) {
+                    enhanceTable(markParticipantTable(table));
+                }
+            } catch (error) {
+                console.warn('CVVZ plus: některé části stránky zůstaly v původní podobě', [{ id: featureId(feature), reason: error.message }]);
+            }
+        }
+    }).observe(document.body, { childList: true });
 }
 
 // Cells of a row (or of the heading row) by the keys of PARTICIPANT_COLUMNS.

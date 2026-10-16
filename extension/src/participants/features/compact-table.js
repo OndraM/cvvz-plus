@@ -1,29 +1,41 @@
 registerFeature({
     page: 'participants',
     name: 'compact-table',
-    label: 'Kompaktnější tabulka seznamu účastníků (nižší řádky, upravené šířky sloupců aj.)',
+    label: 'Kompaktnější tabulka seznamu účastníků (nižší řádky, upravené šířky sloupců aj.) a v okně s přihlášenými na program',
+
+    enhanceSite(document) {
+        watchParticipantModals(document, this, (table) => {
+            compactParticipantTable(table);
+            for (const row of table.rows) {
+                participantCells(row).paid.classList.add('cvvz-hidden');
+            }
+        });
+    },
 
     enhancePage(document) {
-        const table = findParticipantTable(document);
-        table.parentElement.classList.add('cvvz-compact-table');
-
-        const headings = participantCells(table.tHead.rows[0]);
-        headings.firstName.classList.add('cvvz-name');
-        headings.firstName.after(headings.paid);
-        headings.lastName.classList.add('cvvz-hidden');
-        headings.nickname.classList.add('cvvz-hidden');
-        headings.organization.classList.add('cvvz-organization');
-        headings.facebook.classList.add('cvvz-facebook');
-
-        for (const cells of participantRows(table)) {
-            joinParticipantName(cells);
-            markParticipantPaid(cells.paid);
-            cells.firstName.after(cells.paid);
-            // A wrong long value (like a whole address) would not wrap and would stretch the whole table.
-            cells.facebook.classList.replace('text-nowrap', 'cvvz-facebook');
-        }
+        compactParticipantTable(findParticipantTable(document));
     },
 });
+
+function compactParticipantTable(table) {
+    table.parentElement.classList.add('cvvz-compact-table');
+
+    const headings = participantCells(table.tHead.rows[0]);
+    headings.firstName.classList.add('cvvz-name');
+    headings.firstName.after(headings.paid);
+    headings.lastName.classList.add('cvvz-hidden');
+    headings.nickname.classList.add('cvvz-hidden');
+    headings.organization.classList.add('cvvz-organization');
+    headings.facebook.classList.add('cvvz-facebook');
+
+    for (const cells of participantRows(table)) {
+        joinParticipantName(cells);
+        markParticipantPaid(cells.paid);
+        cells.firstName.after(cells.paid);
+        // A wrong long value (like a whole address) would not wrap and would stretch the whole table.
+        cells.facebook.classList.replace('text-nowrap', 'cvvz-facebook');
+    }
+}
 
 function joinParticipantName({ firstName, lastName, nickname }) {
     const name = buildElement('span', 'cvvz-full-name');
