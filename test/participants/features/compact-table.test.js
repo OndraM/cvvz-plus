@@ -1,10 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { enhancePage, readFixture, textsOf } from '../../helpers.js';
+import { buildParticipantModal, enhancePage, openModal, readFixture, textsOf } from '../../helpers.js';
 
 const PAGE = readFixture('participants-2026-10.html');
 const URL = 'https://www.cvvz.cz/prihlaseni-ucastnici';
 const FEATURE = ['src/participants/features/compact-table.js'];
+const PROGRAM_PAGE = readFixture('program-2026-10.html');
 
 function participantRow(document, id) {
     return [...document.querySelectorAll('tbody tr')].find((row) => row.cells[0].textContent === id);
@@ -63,5 +64,41 @@ test('leaves the table as the site shows it when the site changed its columns', 
     const { document, warnings } = enhancePage(PAGE.replace('<th>Přezdívka</th>', '<th>Nick</th>'), { url: URL, features: FEATURE });
 
     assert.equal(document.querySelector('.cvvz-compact-table, .cvvz-hidden'), null);
+    assert.match(warnings[0][1][0].reason, /^unexpected columns: ID, Jméno, Příjmení, Nick,/);
+});
+
+test('makes both tables of the modal with the participants of a program term compact too, without paid', async () => {
+    const { window, warnings } = enhancePage(PROGRAM_PAGE, { features: FEATURE });
+    const modal = await openModal(window, buildParticipantModal(PAGE));
+    const tables = modal.querySelectorAll('.table-container');
+
+    assert.deepEqual(warnings, []);
+    assert.equal(tables.length, 2);
+    for (const table of tables) {
+        assert.ok(table.classList.contains('cvvz-compact-table'));
+        assert.deepEqual(visibleTexts(table.querySelectorAll('thead th')), [
+            'ID', 'Jméno', 'Stupeň BL', 'Organizace', 'Město', 'FB', 'Tel', 'E-mail',
+        ]);
+        for (const row of table.querySelectorAll('tbody tr')) {
+            assert.equal(visibleTexts(row.cells).length, 8);
+        }
+        assert.deepEqual(textsOf(table.querySelector('tbody tr').cells[1].children), ['Jan Testovací', 'Tester']);
+    }
+    assert.equal(window.document.querySelector('.cvvz-participants:not(.modal *)'), null, 'tables of the program page are left alone');
+});
+
+test('leaves the modal without participants as it is', async () => {
+    const { window, warnings } = enhancePage(PROGRAM_PAGE, { features: FEATURE });
+    await openModal(window, '<div class="modal fade"><div class="container"><p>Nikdo není přihlášený</p></div></div>');
+
+    assert.deepEqual(warnings, []);
+});
+
+test('leaves the modal as the site shows it when the site changed its columns', async () => {
+    const { window, warnings } = enhancePage(PROGRAM_PAGE, { features: FEATURE });
+    const modal = await openModal(window, buildParticipantModal(PAGE.replace('<th>Přezdívka</th>', '<th>Nick</th>')));
+
+    assert.equal(modal.querySelector('.cvvz-compact-table, .cvvz-hidden'), null);
+    assert.equal(warnings[0][1][0].id, 'participants/compact-table');
     assert.match(warnings[0][1][0].reason, /^unexpected columns: ID, Jméno, Příjmení, Nick,/);
 });

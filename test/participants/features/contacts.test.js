@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { enhancePage, readFixture, textsOf } from '../../helpers.js';
+import { buildParticipantModal, enhancePage, openModal, readFixture, textsOf } from '../../helpers.js';
 
 const PAGE = readFixture('participants-2026-10.html');
 const URL = 'https://www.cvvz.cz/prihlaseni-ucastnici';
@@ -70,5 +70,16 @@ test('works together with the compact table, in any order', () => {
         assert.deepEqual(warnings, []);
         assert.equal(contactLinks(document, '101').length, 3);
         assert.ok(document.querySelector('.cvvz-compact-table .cvvz-nickname'));
+    }
+});
+
+test('shows the contacts also in both tables of the modal with the participants of a program term', async () => {
+    const { window, warnings } = enhancePage(readFixture('program-2026-10.html'), { features: FEATURE });
+    const modal = await openModal(window, buildParticipantModal(PAGE));
+
+    assert.deepEqual(warnings, []);
+    for (const table of modal.querySelectorAll('table')) {
+        assert.equal(table.querySelector('thead th:nth-child(8)').textContent, 'Kontakt');
+        assert.equal(table.querySelectorAll('tbody tr:first-child a.cvvz-contact').length, 3);
     }
 });

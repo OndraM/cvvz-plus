@@ -60,6 +60,26 @@ export function enhancePage(html, { url, features = FEATURE_SCRIPTS, disabledFea
     return { window, document: window.document, entries, warnings };
 }
 
+// Stand-in for /prihlaseni-ucastnici-programu/<id>, with the participant list's table as both of its tables
+// (registered and watching for a free place).
+export function buildParticipantModal(participantsPage) {
+    const table = new JSDOM(participantsPage).window.document.querySelector('.table-container').outerHTML;
+    return `<div class="modal fade" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-centered"><div class="modal-content"><div class="modal-body">
+        <h4 class="color-primary fw-bold">Přihlášení účastníci</h4>
+        <div class="container">${table}<h4 class="color-primary fw-bold">Hlídací psi</h4>${table}</div>
+    </div></div></div></div>`;
+}
+
+// Like the site after a click on a term's capacity. The extension changes the modal asynchronously, hence the wait.
+export async function openModal(window, html) {
+    const container = window.document.createElement('div');
+    container.innerHTML = html;
+    const modal = container.querySelector('.modal');
+    window.document.body.append(modal);
+    await new Promise((resolve) => setTimeout(resolve));
+    return modal;
+}
+
 export function textsOf(elements) {
     return [...elements].map((element) => element.textContent.trim());
 }
