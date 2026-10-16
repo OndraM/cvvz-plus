@@ -40,6 +40,7 @@
         "src/my-programs/schedule.js",
         "src/my-programs/features/pdf-export.js",
         "src/my-programs/features/timeline.js",
+        "src/my-programs/features/menu-link.js",
         "src/main.js"
       ],
       "css": [
