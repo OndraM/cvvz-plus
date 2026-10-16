@@ -1,0 +1,35 @@
+/* From the start, so it does not blink before the script puts the item into the menu. It also hides the button
+   the site puts back after an action on the Program page. */
+:root:not([data-cvvz-off~="site/watchdog"]) .sticky-side-block[data-bs-target="#watchdogModal"] {
+    display: none !important;
+}
+
+.cvvz-watchdog {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+@media (max-width: 1199.98px) {
+    .logged-in-submenu-container .logged-in-submenu nav:has(.cvvz-watchdog) li {
+        margin-right: 20px;
+    }
+}
+
+/* Dark text on white, readable on the sand color of the menu. */
+.cvvz-watchdog-count {
+    min-width: 1.6em;
+    padding: 0 0.45em;
+    border-radius: 999px;
+    background: #fff;
+    color: #7b4a1e;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1.6;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.cvvz-watchdog-count:empty {
+    display: none;
+}

@@ -28,6 +28,7 @@ Každý modul jde vypnout v nastavení rozšíření.
 |---------------|--------------------------------------------------------------------------------|
 | `logo-plus`   | Přidat ikonku ➕ k logu v záhlaví webu (jako znamení, že je rozšíření zapnuto) |
 | `back-to-top` | Přidat na mobilu tlačítko pro odscrollování zpět nahoru                        |
+| `watchdog`    | Přesunout plovoucí tlačítko Hlídací pes do menu přihlášeného uživatele         |
 
 **Stránka Program** (`program`, https://www.cvvz.cz/program):
 
@@ -133,6 +134,8 @@ Tabulku čte dřív, než ji ostatní moduly změní, proto musí být v `manife
    * Pomocná funkce `buildElement(tag, class, text)` vytvoří prvek (nepoužívat `innerHTML`).
    * Původní HTML prvek stránky nepřestavovat, ale přesunout přes `layout.moveOriginal(element, target)`.
 2. Pokud má feature nějaký styl, přidat do `extension/src/<stránka>/features/nazev.css`.
+   Část webu, kterou modul nahrazuje, může skrýt rovnou v CSS (než skript doběhne), jen když modul není vypnutý ani neselhal:
+   `:root:not([data-cvvz-off~="<stránka>/<nazev>"]) .prvek { display: none; }`
 3. Oba soubory přidat do `manifest.json` a skript i do `extension/options/options.html` (kvůli přepínači v nastavení rozšíření).
 4. Přidat test (`test/<stránka>/features/nazev.test.js`).
 

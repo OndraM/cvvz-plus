@@ -18,14 +18,15 @@ function findScheduleTable(document) {
     return table;
 }
 
-// Reads the rows of the table into [{ date, day, weekday, start, end, program, registerUrl, counts, surcharge, place, rating, unregisterForm }]:
+// Reads the rows of the table into [{ date, day, weekday, start, end, program, watched, registerUrl, counts, surcharge, place, rating, unregisterForm }]:
 //   date            - "2026-11-13", `day` "13. 11." and `weekday` "pátek" as the site writes them
 //   start, end      - minutes from the midnight of the date, after 24 * 60 past it: a block of the night after midnight
 //                     belongs to the evening before, when the table has it
 //   program         - { title, url } of the registered program, null for a free block, which has `registerUrl` instead
+//   watched         - the program is not registered, only watched for a free place: the site marks it by an icon
 //   counts          - { registered, capacity, watching } of the program
 //   place, rating   - cells of the site, or null when empty: what they hold once filled in is not known yet
-//   unregisterForm  - the site's form, which unregisters the participant from the program
+//   unregisterForm  - the site's form, which unregisters the participant from the program, or stops watching it
 // Throws on anything else in the table, so the features leave the page as the site shows it.
 function readSchedule(table) {
     const entries = [...table.tBodies[0].rows].map(readScheduleRow);
@@ -58,9 +59,7 @@ function readScheduleRow(row) {
     if (!timeMatch) {
         throw new Error(`unexpected time "${timeText}"`);
     }
-    const [startHour, startMinute, endHour, endMinute] = timeMatch.slice(1).map(Number);
-    const start = startHour * 60 + startMinute;
-    const end = endHour * 60 + endMinute + (endHour * 60 + endMinute <= start ? 24 * 60 : 0);
+    const { start, end } = scheduleTimes(timeMatch.slice(1));
 
     const entry = {
         date: `${year}-${month.padStart(2, '0')}-${dayOfMonth.padStart(2, '0')}`,
@@ -69,6 +68,7 @@ function readScheduleRow(row) {
         start,
         end,
         program: null,
+        watched: false,
         registerUrl: null,
         counts: null,
         surcharge: false,
@@ -94,6 +94,7 @@ function readScheduleRow(row) {
 
 function readScheduleProgram(entry, link, countsCell, surchargeCell, actionCell) {
     entry.program = { title: scheduleText(link), url: link.getAttribute('href') };
+    entry.watched = link.parentElement.querySelector('svg') !== null;
 
     const countsMatch = scheduleText(countsCell).match(/^(\d+)\/(\d+)\/(\d+)$/);
     if (!countsMatch) {
@@ -111,6 +112,14 @@ function readScheduleProgram(entry, link, countsCell, surchargeCell, actionCell)
     if (!entry.unregisterForm) {
         throw new Error('missing unregister form');
     }
+}
+
+// Minutes from midnight of the hours and minutes of a start and an end; a block past midnight ends after 24 * 60.
+function scheduleTimes(parts) {
+    const [startHour, startMinute, endHour, endMinute] = parts.map(Number);
+    const start = startHour * 60 + startMinute;
+    const end = endHour * 60 + endMinute;
+    return { start, end: end <= start ? end + 24 * 60 : end };
 }
 
 function scheduleText(element) {

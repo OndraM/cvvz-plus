@@ -70,7 +70,7 @@ function timelineDays(entries) {
 // block, which spans all lanes up to the next block at its time. Returns the number of lanes besides the aside one.
 function timelineLanes(blocks) {
     const overlap = (a, b) => a !== b && a.start < b.end && b.start < a.end;
-    const programs = blocks.filter((block) => block.program);
+    const programs = blocks.filter((block) => block.program && !block.watched);
     const laned = [];
     for (const block of blocks) {
         block.aside = !block.program && programs.some((program) => overlap(block, program));
@@ -170,10 +170,16 @@ function buildTimelineBlock(block) {
         return element;
     }
 
-    const element = buildElement('div', 'cvvz-timeline-block cvvz-timeline-program');
+    const element = buildElement('div', `cvvz-timeline-block ${block.watched ? 'cvvz-timeline-watched' : 'cvvz-timeline-program'}`);
     const title = buildElement('a', 'cvvz-timeline-title', block.program.title);
     title.href = block.program.url;
-    element.append(time, title);
+    if (block.watched) {
+        const watchedTitle = buildElement('span', 'cvvz-timeline-watched-title');
+        watchedTitle.append(buildElement('strong', '', 'Hlídací pes:'), ' ', title);
+        element.append(time, watchedTitle);
+    } else {
+        element.append(time, title);
+    }
     if (block.place) {
         const place = buildElement('span', 'cvvz-timeline-place');
         place.append(...timelineCopy(block.place));
@@ -190,11 +196,16 @@ function buildTimelineBlock(block) {
         rating.append(...timelineCopy(block.rating));
         element.append(rating);
     }
-    // A copy, as the list keeps the site's form. It is a plain form, which works without the site's scripts.
-    const unregister = block.unregisterForm.cloneNode(true);
-    unregister.classList.add('cvvz-timeline-unregister');
-    element.append(unregister);
+    element.append(timelineFormCopy(block.unregisterForm, block.watched ? 'Zrušit hlídání' : 'Odhlásit se'));
     return element;
+}
+
+// A copy, as the list keeps the site's form. It is a plain form, which works without the site's scripts.
+function timelineFormCopy(form, title) {
+    const copy = form.cloneNode(true);
+    copy.classList.add('cvvz-timeline-unregister');
+    copy.querySelector('button').title = title;
+    return copy;
 }
 
 function timelineCopy(cell) {

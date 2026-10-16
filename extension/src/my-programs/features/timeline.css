@@ -143,6 +143,41 @@
     opacity: 0.55;
 }
 
+/* A program watched for a free place, in its time block as a registered one. */
+.cvvz-timeline-watched {
+    border: 1px dashed #7b4a1e;
+    background: #f4ebe2;
+    color: #131514;
+}
+
+.cvvz-timeline-watched strong {
+    color: #7b4a1e;
+}
+
+/* Leaves room for the button to stop watching. */
+.cvvz-timeline-watched .cvvz-timeline-time,
+.cvvz-timeline-watched-title {
+    padding-right: 22px;
+}
+
+.cvvz-timeline-watched .cvvz-timeline-title {
+    color: #131514;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.cvvz-timeline-watched .cvvz-timeline-title:hover {
+    text-decoration: underline;
+}
+
+.cvvz-timeline-watched .cvvz-timeline-surcharge {
+    background: rgba(123, 74, 30, 0.12);
+}
+
+.cvvz-timeline-watched .cvvz-timeline-unregister svg {
+    fill: #ed1b2e;
+}
+
 .cvvz-timeline-now {
     position: relative;
     z-index: 1;

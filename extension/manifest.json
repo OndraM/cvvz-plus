@@ -20,6 +20,7 @@
         "src/shared/tabs.js",
         "src/site/features/logo-plus.js",
         "src/site/features/back-to-top.js",
+        "src/site/features/watchdog.js",
         "src/program/parse.js",
         "src/program/layout.js",
         "src/program/program-list.js",
@@ -42,12 +43,17 @@
         "src/my-programs/features/timeline.js",
         "src/my-programs/features/menu-link.js",
         "src/main.js"
-      ],
+      ]
+    },
+    {
+      "matches": ["https://www.cvvz.cz/*"],
+      "run_at": "document_start",
       "css": [
         "src/shared/features.css",
         "src/shared/tabs.css",
         "src/site/features/logo-plus.css",
         "src/site/features/back-to-top.css",
+        "src/site/features/watchdog.css",
         "src/program/layout.css",
         "src/program/features/filter-form.css",
         "src/program/features/program-type.css",
