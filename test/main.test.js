@@ -6,6 +6,7 @@ import { CONTENT_SCRIPTS, createPage, enhancePage, FEATURE_SCRIPTS, manifest, re
 const PROGRAM_PAGE = readFixture('program-2026-10.html');
 const HOMEPAGE = readFixture('homepage-2026-10.html');
 const PARTICIPANTS_PAGE = readFixture('participants-2026-10.html');
+const MY_PROGRAMS_PAGE = readFixture('moje-programy-2026-10.html');
 const SRC_DIR = new URL('../extension/src/', import.meta.url);
 
 const PAGE_DIRS = readdirSync(SRC_DIR, { withFileTypes: true })
@@ -99,6 +100,23 @@ test('participant features run only on the participant page, also with a filter 
     const filtered = enhancePage(PARTICIPANTS_PAGE, { url: 'https://www.cvvz.cz/prihlaseni-ucastnici?event_registration_filter%5Bcity%5D=Brno' });
     assert.ok(filtered.document.querySelector('.cvvz-compact-table .cvvz-contacts'));
     assert.deepEqual(filtered.warnings, []);
+});
+
+test('features of my programs run only on their page', () => {
+    const elsewhere = enhancePage(MY_PROGRAMS_PAGE, { url: 'https://www.cvvz.cz/' });
+    assert.equal(elsewhere.document.querySelector('.cvvz-timeline, .cvvz-pdf-export'), null);
+    assert.deepEqual(elsewhere.warnings, []);
+
+    // During the event, the timer of the timeline's current time would keep the tests running.
+    const page = enhancePage(MY_PROGRAMS_PAGE, {
+        url: 'https://www.cvvz.cz/moje-programy',
+        beforeEnhance: (window) => {
+            window.setInterval = () => {};
+        },
+    });
+    assert.ok(page.document.querySelector('.cvvz-timeline'));
+    assert.ok(page.document.querySelector('.cvvz-pdf-export'));
+    assert.deepEqual(page.warnings, []);
 });
 
 test('when the settings cannot be read, all features run as by default', () => {

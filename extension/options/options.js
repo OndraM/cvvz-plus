@@ -2,6 +2,7 @@ const OPTIONS_PAGE_TITLES = {
     site: 'Celý web',
     program: 'Stránka Program',
     participants: 'Stránka Přihlášení účastníci',
+    'my-programs': 'Stránka Moje programy',
 };
 
 function renderOptions(form, disabledIds) {

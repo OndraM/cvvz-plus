@@ -44,6 +44,13 @@ Každý modul jde vypnout v nastavení rozšíření.
 | `program-count` | Zobrazit u nadpisu celkový počet vypsaných programů                                             |
 | `filter-form`   | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
 
+**Stránka Moje programy** (`my-programs`, https://www.cvvz.cz/moje-programy):
+
+| Modul        | Popis                                                |
+|--------------|------------------------------------------------------|
+| `timeline`   | Přidat zobrazení přihlášených programů na časové ose |
+| `pdf-export` | Přesunout odkaz Export do PDF                        |
+
 **Stránka Přihlášení účastníci** (`participants`, https://www.cvvz.cz/prihlaseni-ucastnici):
 
 | Modul           | Popis                                                                                                               |
@@ -58,6 +65,7 @@ Každý modul jde vypnout v nastavení rozšíření.
 extension/
   manifest.json                    manifest rozšíření (jeden pro všechny browsery)
   src/shared/features.js|css       registr modulů (registerFeature) a společné styly
+  src/shared/tabs.js|css           záložky nad obsahem stránky (Přihlášení účastníci, Moje programy)
   src/site/features/*.js|css       moduly pro všechny stránky webu
   src/program/parse.js             parser programů ze stránky do interního datového modelu
   src/program/layout.js            generátor základní kostry programu, na který jednotlivé moduly přidávají úpravy
@@ -65,6 +73,8 @@ extension/
   src/program/features/*.js|css    moduly stránky Program
   src/participants/table.js        tabulka účastníků
   src/participants/features/*.js|css  moduly stránky Přihlášení účastníci
+  src/my-programs/schedule.js      parser tabulky přihlášených programů
+  src/my-programs/features/*.js|css   moduly stránky Moje programy
   src/main.js                      entrypoint, spustí zapnuté moduly stránek, ke kterým patří aktuální URL (viz registr `PAGES`)
   options/options.html|js|css      nastavení rozšíření: přepínač pro každý modul
 test/                              testy (Node.js + jsdom), kopírující strukturu modulů
@@ -83,6 +93,10 @@ Každý modul má v `page` uvedenou svou stránku. `main.js` pak podle URL spust
 4. Program, kterému parser nebo některý modul nerozumí, zůstane tak, jak ho vykreslil web v původním HTML. Do konzole browseru se pak vypíše důvod jako varování.
 
 Moduly běží v pořadí podle `manifest.json` a v tom pořadí se také zobrazují jejich části.
+
+### Stránka Moje programy
+
+Modul `pdf-export` mění stránku nad časovou osou, proto musí být v `manifest.json` před `timeline` (jinak by posun na aktuální čas skončil jinde).
 
 ### Stránka Přihlášení účastníci
 
@@ -171,3 +185,4 @@ npm run lint        # kontrola rozšíření validátorem addons.mozilla.org
 * Stránka Přihlášení účastníci obsahuje osobní údaje, do repozitáře se proto nesmí uložit tak, jak je.
   Fixture se vytvoří skriptem, který stáhne aktuální stránku a skutečné účastníky nahradí vymyšlenými:
   `node test/make-participants-fixture.js > test/fixtures/participants-RRRR-MM.html`
+* Stránka Moje programy je jen pro přihlášené (`test:live` ji nekontroluje). Fixture je ručně uložená stránka s osobními údaji nahrazenými vymyšlenými.

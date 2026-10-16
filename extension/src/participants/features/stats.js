@@ -53,14 +53,14 @@ registerFeature({
         for (const participantsLink of participantsLinks) {
             const link = buildElement('a', 'dropdown-item', 'Statistiky účastníků');
             link.setAttribute('href', STATS_URL);
-            link.append(buildStatsPlus());
+            link.append(buildPlusBadge());
             const item = buildElement('li');
             item.append(link);
             participantsLink.parentElement.after(item);
         }
         for (const link of statsSiteLinks(document, 'footer a')) {
             link.setAttribute('href', STATS_URL);
-            link.append(buildStatsPlus());
+            link.append(buildPlusBadge());
         }
     },
 
@@ -75,13 +75,6 @@ registerFeature({
 
 function statsSiteLinks(document, selector) {
     return [...document.querySelectorAll(selector)].filter((link) => link.textContent.trim() === 'Statistiky účastníků');
-}
-
-// The sign of the extension, as next to the site's logo: the statistics are not a page of the site.
-function buildStatsPlus() {
-    const plus = buildElement('span', 'cvvz-plus cvvz-stats-plus');
-    plus.title = 'Přidáno rozšířením CVVZ plus';
-    return plus;
 }
 
 function readStatsParticipants(table) {
@@ -139,41 +132,18 @@ function statsCityNames(cities) {
     return keys.map((key) => names.get(key));
 }
 
+// The open tab is in the URL, so it stays open after reloading, and the site's link opens it also on this page.
 function buildStatsTabs(list, stats, count) {
-    const tabs = buildElement('div', 'cvvz-stats-tabs');
-    tabs.setAttribute('role', 'tablist');
-    const listTab = buildStatsTab('Seznam účastníků');
-    listTab.append(buildElement('span', 'cvvz-stats-tab-count', String(count)));
-    const statsTab = buildStatsTab('Statistiky');
-    statsTab.append(buildStatsPlus());
-    tabs.append(listTab, statsTab);
-
-    const showTab = () => {
-        const showStats = window.location.hash === STATS_HASH;
-        listTab.setAttribute('aria-selected', String(!showStats));
-        statsTab.setAttribute('aria-selected', String(showStats));
-        list.classList.toggle('cvvz-hidden', showStats);
-        stats.classList.toggle('cvvz-hidden', !showStats);
-    };
-    // The open tab is in the URL, so it stays open after reloading, and the site's link opens it also on this page.
-    listTab.addEventListener('click', () => {
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-        showTab();
+    const tabs = buildTabs([
+        { content: ['Seznam účastníků', buildElement('span', 'cvvz-stats-tab-count', String(count))], panel: list },
+        { content: ['Statistiky', buildPlusBadge()], panel: stats },
+    ], (index) => {
+        window.history.replaceState(null, '', index === 1 ? STATS_HASH : window.location.pathname + window.location.search);
     });
-    statsTab.addEventListener('click', () => {
-        window.history.replaceState(null, '', STATS_HASH);
-        showTab();
-    });
-    window.addEventListener('hashchange', showTab);
-    showTab();
-    return tabs;
-}
-
-function buildStatsTab(text) {
-    const tab = buildElement('button', 'cvvz-stats-tab', text);
-    tab.type = 'button';
-    tab.setAttribute('role', 'tab');
-    return tab;
+    const showTabOfUrl = () => tabs.selectTab(window.location.hash === STATS_HASH ? 1 : 0);
+    window.addEventListener('hashchange', showTabOfUrl);
+    showTabOfUrl();
+    return tabs.row;
 }
 
 function buildStatsPanel(participants, location) {

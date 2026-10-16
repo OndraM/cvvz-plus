@@ -17,6 +17,7 @@
       "matches": ["https://www.cvvz.cz/*"],
       "js": [
         "src/shared/features.js",
+        "src/shared/tabs.js",
         "src/site/features/logo-plus.js",
         "src/site/features/back-to-top.js",
         "src/program/parse.js",
@@ -36,10 +37,14 @@
         "src/participants/features/stats.js",
         "src/participants/features/compact-table.js",
         "src/participants/features/contacts.js",
+        "src/my-programs/schedule.js",
+        "src/my-programs/features/pdf-export.js",
+        "src/my-programs/features/timeline.js",
         "src/main.js"
       ],
       "css": [
         "src/shared/features.css",
+        "src/shared/tabs.css",
         "src/site/features/logo-plus.css",
         "src/site/features/back-to-top.css",
         "src/program/layout.css",
@@ -55,7 +60,9 @@
         "src/program/features/program-count.css",
         "src/participants/features/stats.css",
         "src/participants/features/compact-table.css",
-        "src/participants/features/contacts.css"
+        "src/participants/features/contacts.css",
+        "src/my-programs/features/pdf-export.css",
+        "src/my-programs/features/timeline.css"
       ]
     }
   ],

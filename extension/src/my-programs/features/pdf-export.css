@@ -1,0 +1,39 @@
+.cvvz-pdf-export-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 12px;
+}
+
+/* The site's classes of the link make its text large (with !important) and only change its color on hover. */
+a.cvvz-pdf-export {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1.5px solid #7b4a1e;
+    border-radius: 999px;
+    font-size: 1rem !important;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.cvvz-pdf-export:hover,
+.cvvz-pdf-export:focus-visible {
+    background: #f4ebe2;
+}
+
+.cvvz-pdf-export::before {
+    content: "";
+    width: 1.1em;
+    height: 1.1em;
+    background: currentColor;
+    mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5'/><path d='M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z'/></svg>") center / contain no-repeat;
+}
+
+@media (max-width: 575.98px) {
+    .cvvz-pdf-export-words {
+        display: none;
+    }
+}

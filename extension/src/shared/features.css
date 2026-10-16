@@ -7,3 +7,14 @@
 .cvvz-plus {
     background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='19' fill='%23fbd502'/><g fill='%237b4a1e'><rect x='7' y='15.5' width='24' height='7' rx='3.5'/><rect x='15.5' y='7' width='7' height='24' rx='3.5'/></g></svg>") center / contain no-repeat;
 }
+
+/* Raised, as the badge next to the site's logo, without making the line higher. */
+.cvvz-plus-badge {
+    display: inline-block;
+    position: relative;
+    top: -0.5em;
+    width: 0.75em;
+    height: 0.75em;
+    margin-left: 0.25em;
+    opacity: 0.6;
+}
