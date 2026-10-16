@@ -15,7 +15,7 @@ const FEATURES = [];
 //                                                    // for the parts of a feature outside its page (like a link to it)
 // });
 //
-// Features run in the order of the manifest.
+// Features run in the order of the manifest, right after the HTML of the page is parsed.
 function registerFeature(feature) {
     FEATURES.push(feature);
 }

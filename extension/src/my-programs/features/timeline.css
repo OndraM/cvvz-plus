@@ -267,8 +267,8 @@
         width: 2px;
         margin-left: calc(var(--timeline-slot-part) * 10px - 1px);
         /* Scrolled to with an hour before it in view. All days usually fit on the screen, so the page
-           moves only when the day is in the lower half, to have it in the middle. */
-        scroll-margin: 50vh 0 0 230px;
+           moves only when the day is not in view, to have it in view below the site's header. */
+        scroll-margin: 184px 0 16px 230px;
     }
 
     .cvvz-timeline-now span {
