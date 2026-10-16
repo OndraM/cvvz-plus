@@ -74,7 +74,7 @@ function daysOf(document) {
         [...day.querySelectorAll('.cvvz-timeline-block')].map((block) => {
             const title = block.querySelector('.cvvz-timeline-title');
             const [time, ...texts] = [...block.children].map((child) => child.textContent);
-            return `${time} ${title ? title.textContent : texts.join(' ')}`;
+            return `${time} ${title ? title.textContent : texts.map((text) => text.trim()).filter(Boolean).join(' ')}`;
         }),
     ]));
 }
@@ -102,20 +102,20 @@ test('adds a tab with the timeline next to the list, with the list open', () => 
     assert.equal(isHidden(document.querySelector('.table-container')), false);
 });
 
-test('shows the registered programs and the free blocks in the days of the table', () => {
+test('shows the registered and watched programs and the free blocks in the days of the table', () => {
     const { document } = openPage();
 
     assert.deepEqual(daysOf(document), {
-        'Pátek13. 11.': ['18:00\u201319:30 Volný blok Přihlásit se', '20:00\u201321:30 Ukázkový program', '22:00\u201323:30 Volný blok Přihlásit se'],
+        'Pátek13. 11.': ['18:00\u201319:30 Volný blok Přihlásit se', '20:00\u201321:30 Ukázkový program', '22:00\u201323:30 Ukázkový hlídaný program v pátek'],
         'Sobota14. 11.': [
             '8:00\u20139:30 Volný blok Přihlásit se',
             '10:00\u201311:30 Volný blok Přihlásit se',
             '14:00\u201315:30 Ukázkový program s opravdu hodně dlouhým názvem, který se nevejde na jeden řádek',
-            '16:00\u201317:30 Volný blok Přihlásit se',
-            '20:00\u201321:30 Volný blok Přihlásit se',
-            '22:00\u201323:30 Volný blok Přihlásit se',
+            '16:00\u201317:30 Ukázková dílna',
+            '20:00\u201321:30 Ukázkové zakončení',
+            '22:00\u201323:30 Ukázková beseda',
         ],
-        'Neděle15. 11.': ['8:30\u201310:00 Volný blok Přihlásit se', '10:30\u201312:00 Volný blok Přihlásit se'],
+        'Neděle15. 11.': ['8:30\u201310:00 Ukázkový hlídaný program v neděli', '10:30\u201312:00 Volný blok Přihlásit se'],
     });
     assert.equal(blockAt(document, '18:00\u201319:30').querySelector('a').getAttribute('href'), '/program?timeBlock=163');
 });
@@ -124,21 +124,21 @@ test('shows the details of a registered program, with a copy of the site\'s form
     const { document } = openPage();
     const block = blockOf(document, 'Ukázkový program s opravdu hodně dlouhým názvem, který se nevejde na jeden řádek');
 
-    assert.equal(block.querySelector('.cvvz-timeline-title').getAttribute('href'), '/program#program-102');
-    assert.deepEqual(textsOf(block.querySelector('.cvvz-timeline-details').children), ['18 z 25 přihlášených · 2 hlídají volné místo', 'Doplatek']);
+    assert.equal(block.querySelector('.cvvz-timeline-title').getAttribute('href'), '/program#program-103');
+    assert.deepEqual(textsOf(block.querySelector('.cvvz-timeline-details').children), ['8 z 30 přihlášených', 'Doplatek']);
     assert.equal(block.querySelector('.cvvz-timeline-place, .cvvz-timeline-rating'), null);
 
     const form = block.querySelector('form.cvvz-timeline-unregister');
     assert.equal(form.getAttribute('action'), '/unregister-program-timeblock');
-    assert.equal(form.querySelector('input[name="id"]').value, '1002');
+    assert.equal(form.querySelector('input[name="id"]').value, '1003');
     assert.equal(form.querySelector('button').title, 'Odhlásit se');
-    assert.ok(document.querySelector('.table-container input[name="id"][value="1002"]'));
+    assert.ok(document.querySelector('.table-container input[name="id"][value="1003"]'));
 });
 
 test('a program without a surcharge and with one watching for a free place', () => {
-    const { document } = openPage(PAGE.replace('>412/1000/0<', '>412/1000/1<'));
+    const { document } = openPage(PAGE.replace('>101/1000/0<', '>101/1000/1<'));
 
-    assert.deepEqual(textsOf(blockOf(document, 'Ukázkový program').querySelector('.cvvz-timeline-details').children), ['412 z 1000 přihlášených · 1 hlídá volné místo']);
+    assert.deepEqual(textsOf(blockOf(document, 'Ukázkový program').querySelector('.cvvz-timeline-details').children), ['101 z 1000 přihlášených · 1 hlídá volné místo']);
 });
 
 test('shows the place and the rating as the site fills them in', () => {
@@ -151,6 +151,36 @@ test('shows the place and the rating as the site fills them in', () => {
 
     assert.equal(block.querySelector('.cvvz-timeline-place').textContent.trim(), 'Učebna 12');
     assert.equal(block.querySelector('.cvvz-timeline-rating a').getAttribute('href'), '/hodnoceni/1');
+});
+
+test('shows a watched program of the table in its time block, with its details and a copy of the form to stop watching', () => {
+    const { document, warnings } = openPage();
+    const block = blockOf(document, 'Ukázkový hlídaný program v pátek');
+
+    assert.deepEqual(warnings, []);
+    assert.deepEqual([...block.classList], ['cvvz-timeline-block', 'cvvz-timeline-watched']);
+    assert.equal(block.querySelector('.cvvz-timeline-watched-title').textContent, 'Hlídací pes: Ukázkový hlídaný program v pátek');
+    assert.equal(block.querySelector('.cvvz-timeline-title').getAttribute('href'), '/program#program-102');
+    assert.deepEqual(textsOf(block.querySelector('.cvvz-timeline-details').children), ['20 z 20 přihlášených · 10 hlídá volné místo']);
+    assert.equal(block.querySelector('form input[name="id"]').value, '1002');
+    assert.equal(block.querySelector('form button').title, 'Zrušit hlídání');
+});
+
+// The site's window lists also the watched programs of the past years, even at the times of this year's blocks,
+// while the table has only the blocks of this year.
+test('shows the watched programs of the table only, not those only in the site\'s window', () => {
+    const { document } = openPage(PAGE.replace('neděle 10:00 až 11:30', 'sobota 14:00 až 15:30'));
+
+    assert.ok(document.getElementById('watchdogModal').textContent.includes('Ukázkový loňský hlídaný program'));
+    assert.equal(document.querySelector('.cvvz-timeline').textContent.includes('Ukázkový loňský hlídaný program'), false);
+});
+
+test('shows the place of a watched program as the site fills it in', () => {
+    const row = PAGE.indexOf('/program#program-102');
+    const filled = PAGE.slice(0, row) + PAGE.slice(row).replace('<div></div>', '<div>Učebna 12</div>');
+    const { document } = openPage(filled);
+
+    assert.equal(blockOf(document, 'Ukázkový hlídaný program v pátek').querySelector('.cvvz-timeline-place').textContent.trim(), 'Učebna 12');
 });
 
 test('places the blocks on the shared time axis of the wide screen and in their own day on a phone', () => {
@@ -305,7 +335,7 @@ test('leaves the page as the site shows it when it does not understand the table
     for (const [page, reason] of [
         [PAGE.replace('<th>Místo</th>', '<th>Kde</th>'), 'unexpected columns: Den, Čas, Program, Přihlášení, Kde, Hodnocení, Doplatek, '],
         [PAGE.replace('<td>18:00\u201419:30</td>', '<td>večer</td>'), 'unexpected time "večer"'],
-        [PAGE.replace('>412/1000/0<', '>412 z 1000<'), 'unexpected counts "412 z 1000"'],
+        [PAGE.replace('>101/1000/0<', '>101 z 1000<'), 'unexpected counts "101 z 1000"'],
     ]) {
         const { document, warnings } = openPage(page);
 

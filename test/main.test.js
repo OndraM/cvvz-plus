@@ -16,10 +16,15 @@ const PAGE_DIRS = readdirSync(SRC_DIR, { withFileTypes: true })
 test('all scripts are in one manifest entry for the whole site', () => {
     // One entry loads every file exactly once into the page's single content script scope,
     // so top-level names cannot clash between entries.
-    assert.equal(manifest.content_scripts.length, 1);
-    assert.deepEqual(manifest.content_scripts[0].matches, ['https://www.cvvz.cz/*']);
+    const [scripts, styles] = manifest.content_scripts;
+    assert.equal(manifest.content_scripts.length, 2);
+    assert.deepEqual(scripts.matches, ['https://www.cvvz.cz/*']);
+    assert.equal(scripts.css, undefined);
     assert.equal(CONTENT_SCRIPTS[0], 'src/shared/features.js');
     assert.equal(CONTENT_SCRIPTS.at(-1), 'src/main.js');
+    assert.deepEqual(styles.matches, ['https://www.cvvz.cz/*']);
+    assert.equal(styles.run_at, 'document_start');
+    assert.equal(styles.js, undefined);
 });
 
 test('every feature script and stylesheet is in the manifest, and every feature has a test', () => {
@@ -32,7 +37,7 @@ test('every feature script and stylesheet is in the manifest, and every feature 
     }
 
     assert.deepEqual([...FEATURE_SCRIPTS].sort(), scripts.sort());
-    assert.deepEqual(manifest.content_scripts[0].css.filter((file) => file.includes('/features/')).sort(), styles.sort());
+    assert.deepEqual(manifest.content_scripts[1].css.filter((file) => file.includes('/features/')).sort(), styles.sort());
     for (const script of scripts) {
         const testFile = new URL(script.replace('src/', '').replace('.js', '.test.js'), import.meta.url);
         assert.ok(existsSync(testFile), `missing test for ${script}`);
@@ -73,6 +78,7 @@ test('features turned off in the options do not run', () => {
     const { document, warnings } = enhancePage(HOMEPAGE, { url: 'https://www.cvvz.cz/', disabledFeatures: ['site/logo-plus'] });
 
     assert.equal(document.querySelector('.cvvz-logo-plus'), null);
+    assert.equal(document.documentElement.dataset.cvvzOff, 'site/logo-plus');
     assert.deepEqual(warnings, []);
 });
 
@@ -143,6 +149,7 @@ test('a failing feature is reported in the console and the following features st
     });
 
     assert.ok(document.querySelector('.cvvz-logo-plus'));
+    assert.equal(document.documentElement.dataset.cvvzOff, 'site/broken');
     assert.equal(warnings[0][0], 'CVVZ plus: některé části stránky zůstaly v původní podobě');
     assert.deepEqual(structuredClone(warnings[0][1]), [{ id: 'site/broken', reason: 'boom' }]);
 });
