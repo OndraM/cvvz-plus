@@ -96,10 +96,6 @@ Každý modul má v `page` uvedenou svou stránku. `main.js` pak podle URL spust
 
 Moduly běží v pořadí podle `manifest.json` a v tom pořadí se také zobrazují jejich části.
 
-### Stránka Moje programy
-
-Modul `pdf-export` mění stránku nad časovou osou, proto musí být v `manifest.json` před `timeline` (jinak by posun na aktuální čas skončil jinde).
-
 ### Stránka Přihlášení účastníci
 
 Moduly upravují přímo tabulku webu (`enhancePage`). Buňky skrývají (třída `cvvz-hidden`), přesouvají nebo mění jejich obsah.

@@ -244,10 +244,17 @@ function placeTimelineNow(timeline, days) {
 }
 
 // Shows the current time with the programs after it. Its scroll margin in timeline.css keeps it clear of the site's header.
-// The scroll goes to where the line is when the page opens, so the PDF export, which moves the page above it, runs before
-// in the manifest.
+// Until the page has loaded, its fonts and the site's script still move the page, so the scroll waits for it.
 function scrollTimelineToNow(timeline) {
-    timeline.querySelector('.cvvz-timeline-now')?.scrollIntoView({ block: 'start', inline: 'start' });
+    const scroll = () => timeline.querySelector('.cvvz-timeline-now')?.scrollIntoView({
+        block: window.innerWidth >= 768 ? 'nearest' : 'start',
+        inline: 'start',
+    });
+    if (document.readyState === 'complete') {
+        scroll();
+    } else {
+        window.addEventListener('load', scroll, { once: true });
+    }
 }
 
 // The start of the time axis shared by the days on a wide screen.

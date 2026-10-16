@@ -59,6 +59,11 @@ function pageWith(rows) {
     return dom.serialize();
 }
 
+// The timeline scrolls only once the page has loaded.
+function loaded(window) {
+    return new Promise((resolve) => window.addEventListener('load', resolve, { once: true }));
+}
+
 function tabs(document) {
     return document.querySelectorAll('.cvvz-tab');
 }
@@ -273,9 +278,11 @@ test('remembers the open tab and opens it next time', () => {
     assert.ok(isHidden(next.document.querySelector('.cvvz-timeline')));
 });
 
-test('during the event, shows the current time and scrolls to it when the timeline opens', () => {
-    const { document, scrolls } = openPage(PAGE, { now: '2026-11-14T14:42', tab: 'timeline' });
+test('during the event, shows the current time and scrolls to it when the timeline opens and the page has loaded', async () => {
+    const { window, document, scrolls } = openPage(PAGE, { now: '2026-11-14T14:42', tab: 'timeline' });
     const line = document.querySelector('.cvvz-timeline-now');
+    assert.deepEqual(scrolls, []);
+    await loaded(window);
 
     assert.equal(line.closest('.cvvz-timeline-day').dataset.date, '2026-11-14');
     assert.equal(line.textContent, '14:42');
@@ -283,11 +290,20 @@ test('during the event, shows the current time and scrolls to it when the timeli
     assert.equal(line.style.getPropertyValue('--timeline-slot-part'), '0.4');
     assert.equal(scrolls.length, 1);
     assert.equal(scrolls[0].element, line);
+    assert.deepEqual({ ...scrolls[0].options }, { block: 'nearest', inline: 'start' });
+});
+
+test('on a phone, scrolls the current time to the top', async () => {
+    const { window, scrolls } = openPage(PAGE, { now: '2026-11-14T14:42', tab: 'timeline' });
+    window.innerWidth = 390;
+    await loaded(window);
+
     assert.deepEqual({ ...scrolls[0].options }, { block: 'start', inline: 'start' });
 });
 
-test('scrolls to the current time when the timeline tab is clicked, not the list tab', () => {
-    const { document, scrolls } = openPage(PAGE, { now: '2026-11-13T20:15' });
+test('scrolls to the current time when the timeline tab is clicked, not the list tab', async () => {
+    const { window, document, scrolls } = openPage(PAGE, { now: '2026-11-13T20:15' });
+    await loaded(window);
 
     tabs(document)[0].click();
     assert.deepEqual(scrolls, []);
@@ -323,8 +339,9 @@ test('after midnight, shows the current time in the night of the evening before'
     assert.deepEqual(placement(line).slice(0, 2), ['201 / span 1', '33 / span 1']);
 });
 
-test('before the event, shows no current time and does not scroll', () => {
-    const { document, scrolls, timers } = openPage(PAGE, { tab: 'timeline' });
+test('before the event, shows no current time and does not scroll', async () => {
+    const { window, document, scrolls, timers } = openPage(PAGE, { tab: 'timeline' });
+    await loaded(window);
 
     assert.equal(document.querySelector('.cvvz-timeline-now'), null);
     assert.deepEqual(scrolls, []);
