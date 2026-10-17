@@ -24,47 +24,47 @@ Každý modul jde vypnout v nastavení rozšíření.
 
 **Celý web** (`site`, všechny stránky www.cvvz.cz):
 
-| Modul                | Popis                                                                          |
-|----------------------|--------------------------------------------------------------------------------|
-| `logo-plus`          | Přidat ikonku ➕ k logu v záhlaví webu (jako znamení, že je rozšíření zapnuto) |
-| `back-to-top`        | Přidat na mobilu tlačítko pro odscrollování zpět nahoru                        |
-| `watchdog`           | Přesunout plovoucí tlačítko Hlídací pes do menu přihlášeného uživatele         |
-| `toasts`             | Posunout hlášky webu pod menu a zkrátit je na 5 sekund                         |
-| `confirm-unregister` | Zeptat se před odhlášením z programu                                           |
+| Modul | Popis |
+|-------|-------|
+| `logo-plus` | Přidat ikonku ➕ k logu v záhlaví webu (jako znamení, že je rozšíření zapnuto) |
+| `back-to-top` | Přidat na mobilu tlačítko pro odscrollování zpět nahoru |
+| `watchdog` | Přesunout plovoucí tlačítko Hlídací pes do menu přihlášeného uživatele |
+| `toasts` | Posunout hlášky webu pod menu a zkrátit je na 5 sekund |
+| `confirm-unregister` | Zeptat se před odhlášením z programu |
 
 **Stránka Program** (`program`, https://www.cvvz.cz/program):
 
-| Modul            | Popis                                                                                           |
-|------------------|-------------------------------------------------------------------------------------------------|
-| `program-card`   | Zobrazit každý program v ohraničené kartě (pro lepší vizuální přehlednost)                      |
-| `program-type`   | Zobrazit typ programu (provedení) jako štítek s emoji v záhlaví programu                        |
-| `labels`         | Zobrazit parametry programu jako štítky (a ne ve schované tabulce)                              |
-| `lecturer`       | Odkaz na další programy lektora je na jednom řádku za jménem lektora                            |
-| `terms`          | Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí) |
-| `term-capacity`  | Upravit zobrazení volných míst a kapacity na srozumitelnější                                    |
-| `my-terms`       | Zvýraznit přihlášené programy a hlídací psy                                                     |
-| `term-conflicts` | Upozornit na souběh s přihlášeným programem                                                     |
-| `description`    | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
-| `permalink`      | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení           |
-| `program-count`  | Zobrazit u nadpisu celkový počet vypsaných programů                                             |
-| `filter-form`    | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
+| Modul | Popis |
+|-------|-------|
+| `program-card` | Zobrazit každý program v ohraničené kartě (pro lepší vizuální přehlednost) |
+| `program-type` | Zobrazit typ programu (provedení) jako štítek s emoji v záhlaví programu |
+| `labels` | Zobrazit parametry programu jako štítky (a ne ve schované tabulce) |
+| `lecturer` | Odkaz na další programy lektora je na jednom řádku za jménem lektora |
+| `terms` | Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí) |
+| `term-capacity` | Upravit zobrazení volných míst a kapacity na srozumitelnější |
+| `my-terms` | Zvýraznit přihlášené programy a hlídací psy |
+| `term-conflicts` | Upozornit na souběh s přihlášeným programem |
+| `description` | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí |
+| `permalink` | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení |
+| `program-count` | Zobrazit u nadpisu celkový počet vypsaných programů |
+| `filter-form` | Odsadit filtr od seznamu programů pro lepší přehlednost |
 
 **Stránka Moje programy** (`my-programs`, https://www.cvvz.cz/moje-programy):
 
-| Modul               | Popis                                                      |
-|---------------------|------------------------------------------------------------|
-| `timeline`          | Přidat zobrazení přihlášených programů na časové ose       |
-| `menu-link`         | Přejmenovat v menu Přihlášení na programy na Moje programy |
-| `pdf-export`        | Přesunout odkaz Export do PDF                              |
-| `all-programs-link` | Přidat k nadpisu odkaz na všechny programy                 |
+| Modul | Popis |
+|-------|-------|
+| `timeline` | Přidat zobrazení přihlášených programů na časové ose |
+| `menu-link` | Přejmenovat v menu Přihlášení na programy na Moje programy |
+| `pdf-export` | Přesunout odkaz Export do PDF |
+| `all-programs-link` | Přidat k nadpisu odkaz na všechny programy |
 
 **Stránka Přihlášení účastníci** (`participants`, https://www.cvvz.cz/prihlaseni-ucastnici):
 
-| Modul           | Popis                                                                                                               |
-|-----------------|---------------------------------------------------------------------------------------------------------------------|
-| `stats`         | Přidá podstránku Statistiky účastníků do záložky vedle seznamu účastníků, přidá odkaz do menu                       |
+| Modul | Popis |
+|-------|-------|
+| `stats` | Přidá podstránku Statistiky účastníků do záložky vedle seznamu účastníků, přidá odkaz do menu |
 | `compact-table` | Kompaktnější tabulka seznamu účastníků (nižší řádky, upravené šířky sloupců aj.) a v okně s přihlášenými na program |
-| `contacts`      | Zobrazit FB, telefon a e-mail v jednom sloupci jako ikonky                                                          |
+| `contacts` | Zobrazit FB, telefon a e-mail v jednom sloupci jako ikonky |
 
 ## Struktura
 
