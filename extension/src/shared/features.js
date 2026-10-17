@@ -1,4 +1,5 @@
 const FEATURES = [];
+const TOAST_DURATION_MS = 5000;
 
 // A feature is one self-contained adjustment of the site, in the folder of the page it changes:
 // src/<page>/features/<name>.js, with the pages listed in PAGES in main.js.

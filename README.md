@@ -49,6 +49,7 @@ Každý modul jde vypnout v nastavení rozšíření.
 | `program-count` | Zobrazit u nadpisu celkový počet vypsaných programů |
 | `filter-form` | Zmenšit vyhledávací formulář a odsadit ho od seznamu programů |
 | `search` | Fulltextové hledání v programech |
+| `login-hint` | Místo obecné chyby napsat, že je potřeba se nejdřív přihlásit |
 
 **Stránka Moje programy** (`my-programs`, https://www.cvvz.cz/moje-programy):
 
