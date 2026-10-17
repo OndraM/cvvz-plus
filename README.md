@@ -3,14 +3,21 @@
 [![Přidat do Firefoxu](https://img.shields.io/badge/P%C5%99idat_do_Firefoxu-FF7139?logo=firefoxbrowser&logoColor=white)](https://addons.mozilla.org/cs/firefox/addon/cvvz-plus/)
 [![Přidat do Chromu](https://img.shields.io/badge/P%C5%99idat_do_Chromu-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/cvvz-plus/ebopjaeofoelbmaecpdpkkecbakclbnd)
 
-Neoficiální rozšíření pro prohlížeče Firefox a Chrome, které zlepší zpřehlední web [akce CVVZ](https://www.cvvz.cz/) (Celostátní vzájemná výměna zkušeností),
+Neoficiální rozšíření pro prohlížeče Firefox, Firefox pro Android a Chrome, které zlepší zpřehlední web [akce CVVZ](https://www.cvvz.cz/) (Celostátní vzájemná výměna zkušeností),
 zlepší jeho použitelnost, UX a přidá některé nové funkce.
+
+**Hlavní funkce:**
+
+* Kompaktnější a přehlednější stránka Program, včetně zvýraznění již přihlášených programů, vypisování souběhu programů a rychlého hledání.
+* Výpis Moje programy jako časová osa a přehledná i na mobilu.
+* Nová stránka Statistiky účastníků.
+* ... a asi 20 dalších zlepšení a oprav webu pro jeho snazší použití.
+
+Všechny funkce jsou popsané níže a jde je v nastavení rozšíření samostatně vypnout.
 
 ![Program na původním webu a s rozšířením CVVZ plus](docs/cvvz-plus-promo-1280x800.png)
 
-Mimo jiné udělá kompaktnější a přehlednější stránku Program. Jednotlivé funkce jde v nastavení rozšíření samostatně vypnout.
-
-Funguje ve Firefoxu (i na Androidu) a v prohlížečích postavených na Chromiu (Chrome, Edge, Brave, Opera...).
+![Moje programy na původním webu a jako časová osa s rozšířením CVVZ plus](docs/cvvz-plus-my-programs-1280x800.png)
 
 ## Technická implementace
 
