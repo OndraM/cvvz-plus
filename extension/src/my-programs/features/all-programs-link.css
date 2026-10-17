@@ -1,0 +1,26 @@
+.cvvz-all-programs {
+    color: #7b4a1e;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.cvvz-all-programs::after {
+    content: " →" / "";
+}
+
+.cvvz-pdf-export-row:has(> .cvvz-all-programs) {
+    align-items: baseline;
+}
+
+.cvvz-pdf-export-row > .cvvz-all-programs {
+    margin-right: auto;
+    margin-left: 6px;
+}
+
+@media (max-width: 767.98px) {
+    .cvvz-pdf-export-row > .cvvz-all-programs {
+        order: 1;
+        flex-basis: 100%;
+        margin-left: 0;
+    }
+}

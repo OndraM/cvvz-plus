@@ -43,6 +43,7 @@
         "src/participants/features/contacts.js",
         "src/my-programs/schedule.js",
         "src/my-programs/features/pdf-export.js",
+        "src/my-programs/features/all-programs-link.js",
         "src/my-programs/features/timeline.js",
         "src/my-programs/features/menu-link.js",
         "src/main.js"
@@ -74,6 +75,7 @@
         "src/participants/features/compact-table.css",
         "src/participants/features/contacts.css",
         "src/my-programs/features/pdf-export.css",
+        "src/my-programs/features/all-programs-link.css",
         "src/my-programs/features/timeline.css"
       ]
     }
