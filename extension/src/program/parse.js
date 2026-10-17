@@ -19,6 +19,11 @@ const PARSE_DETAIL_FIELDS = {
 
 const PARSE_HEADER_SELECTOR = 'div.alert[id^="program-"]';
 
+const PARSE_TERM_STATES = {
+    'Odhlásit se': 'registered',
+    'Deaktivovat hlídacího psa': 'watching',
+};
+
 function parseProgramList(root) {
     const entries = [];
     const failures = [];
@@ -145,6 +150,10 @@ function parseTermCount(termsRow) {
         throw new Error('missing dates menu');
     }
     return menu.querySelectorAll(':scope > li').length;
+}
+
+function parseTermState(term) {
+    return PARSE_TERM_STATES[term.querySelector('.js-program-action button')?.textContent.trim()] ?? null;
 }
 
 // Handles both the flat table (2025) and rows nested in the "Další podrobnosti" collapse (2026),

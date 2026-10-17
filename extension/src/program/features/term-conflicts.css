@@ -1,0 +1,10 @@
+.cvvz-term-conflict {
+    order: 2;
+    flex-basis: 100%;
+    white-space: normal;
+    color: #6c757d;
+}
+
+.cvvz-term-taken > .dropdown-item > :not(.cvvz-term-conflict) {
+    opacity: 0.5;
+}
