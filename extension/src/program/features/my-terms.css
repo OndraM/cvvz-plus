@@ -1,0 +1,27 @@
+.cvvz-program.cvvz-card.cvvz-registered {
+    outline: 3.5px solid #287f51;
+    outline-offset: -1px;
+    box-shadow: 0 4px 14px rgba(40, 127, 81, 0.14);
+}
+
+.cvvz-program.cvvz-card.cvvz-watching {
+    outline: 3.5px solid #d9a300;
+    outline-offset: -1px;
+    box-shadow: 0 4px 14px rgba(217, 163, 0, 0.16);
+}
+
+.cvvz-program .program-dates-dropdown .dropdown-menu :is(.cvvz-registered, .cvvz-watching) > .dropdown-item {
+    width: auto;
+    margin-inline: -12px;
+    padding-inline: 12px;
+    border-bottom-color: transparent;
+    border-radius: 8px;
+}
+
+.cvvz-program .program-dates-dropdown .dropdown-menu .cvvz-registered > .dropdown-item {
+    background: #e9f6ee;
+}
+
+.cvvz-program .program-dates-dropdown .dropdown-menu .cvvz-watching > .dropdown-item {
+    background: #fdf5d8;
+}

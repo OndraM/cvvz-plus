@@ -8,6 +8,13 @@ registerFeature({
             formatTermTime(item.querySelector(':scope > span'));
             formatTermCapacity(item.querySelector('.ajax-modal'));
         }
+        new MutationObserver((mutations) => {
+            for (const { target } of mutations) {
+                if (target.matches('.program-dates-dropdown .ajax-modal')) {
+                    formatTermCapacity(target);
+                }
+            }
+        }).observe(document.body, { childList: true, subtree: true });
     },
 });
 

@@ -145,13 +145,13 @@
 
 /* A program watched for a free place, in its time block as a registered one. */
 .cvvz-timeline-watched {
-    border: 1px dashed #7b4a1e;
-    background: #f4ebe2;
+    border: 1.5px dashed #d9a300;
+    background: #fdf5d8;
     color: #131514;
 }
 
 .cvvz-timeline-watched strong {
-    color: #7b4a1e;
+    color: #7a5a00;
 }
 
 /* Leaves room for the button to stop watching. */
@@ -171,7 +171,7 @@
 }
 
 .cvvz-timeline-watched .cvvz-timeline-surcharge {
-    background: rgba(123, 74, 30, 0.12);
+    background: rgba(217, 163, 0, 0.2);
 }
 
 .cvvz-timeline-watched .cvvz-timeline-unregister svg {
