@@ -23,6 +23,7 @@
         "src/site/features/back-to-top.js",
         "src/site/features/watchdog.js",
         "src/site/features/toasts.js",
+        "src/site/features/confirm-unregister.js",
         "src/program/parse.js",
         "src/program/layout.js",
         "src/program/program-list.js",
