@@ -24,12 +24,13 @@ Každý modul jde vypnout v nastavení rozšíření.
 
 **Celý web** (`site`, všechny stránky www.cvvz.cz):
 
-| Modul         | Popis                                                                          |
-|---------------|--------------------------------------------------------------------------------|
-| `logo-plus`   | Přidat ikonku ➕ k logu v záhlaví webu (jako znamení, že je rozšíření zapnuto) |
-| `back-to-top` | Přidat na mobilu tlačítko pro odscrollování zpět nahoru                        |
-| `watchdog`    | Přesunout plovoucí tlačítko Hlídací pes do menu přihlášeného uživatele         |
-| `toasts`      | Posunout hlášky webu pod menu a zkrátit je na 5 sekund                         |
+| Modul                | Popis                                                                          |
+|----------------------|--------------------------------------------------------------------------------|
+| `logo-plus`          | Přidat ikonku ➕ k logu v záhlaví webu (jako znamení, že je rozšíření zapnuto) |
+| `back-to-top`        | Přidat na mobilu tlačítko pro odscrollování zpět nahoru                        |
+| `watchdog`           | Přesunout plovoucí tlačítko Hlídací pes do menu přihlášeného uživatele         |
+| `toasts`             | Posunout hlášky webu pod menu a zkrátit je na 5 sekund                         |
+| `confirm-unregister` | Zeptat se před odhlášením z programu                                           |
 
 **Stránka Program** (`program`, https://www.cvvz.cz/program):
 
