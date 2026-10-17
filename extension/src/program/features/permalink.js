@@ -25,7 +25,7 @@ registerFeature({
         const hash = document.location.hash;
         const target = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null;
         if (target?.classList.contains('cvvz-program')) {
-            target.scrollIntoView();
+            setTimeout(() => target.scrollIntoView());
         }
     },
 });

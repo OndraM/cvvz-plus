@@ -58,11 +58,17 @@ test('without access to the clipboard, a click goes to the program', async () =>
     assert.equal(window.location.hash, '#program-644');
 });
 
-test('scrolls to the program linked in the URL after the layout changed', () => {
-    assert.deepEqual(openPage('https://www.cvvz.cz/program#program-682').scrolledTo, ['program-682']);
+test('scrolls to the program linked in the URL after the layout changed', async () => {
+    const { scrolledTo } = openPage('https://www.cvvz.cz/program#program-682');
+    assert.deepEqual(scrolledTo, []);
+
+    await flushPromises();
+    assert.deepEqual(scrolledTo, ['program-682']);
 });
 
-test('does not scroll without a link to a program', () => {
-    assert.deepEqual(openPage('https://www.cvvz.cz/program').scrolledTo, []);
-    assert.deepEqual(openPage('https://www.cvvz.cz/program#program_filter_form').scrolledTo, []);
+test('does not scroll without a link to a program', async () => {
+    const pages = [openPage('https://www.cvvz.cz/program'), openPage('https://www.cvvz.cz/program#program_filter_form')];
+    await flushPromises();
+
+    assert.deepEqual(pages.map((page) => page.scrolledTo), [[], []]);
 });
