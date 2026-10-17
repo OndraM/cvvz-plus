@@ -47,7 +47,8 @@ Každý modul jde vypnout v nastavení rozšíření.
 | `description` | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí |
 | `permalink` | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení |
 | `program-count` | Zobrazit u nadpisu celkový počet vypsaných programů |
-| `filter-form` | Odsadit filtr od seznamu programů pro lepší přehlednost |
+| `filter-form` | Zmenšit vyhledávací formulář a odsadit ho od seznamu programů |
+| `search` | Fulltextové hledání v programech |
 
 **Stránka Moje programy** (`my-programs`, https://www.cvvz.cz/moje-programy):
 

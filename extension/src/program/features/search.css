@@ -1,0 +1,58 @@
+.cvvz-search {
+    margin-bottom: 28px;
+}
+
+.cvvz-search .form-floating {
+    margin-bottom: 0;
+}
+
+.cvvz-search .form-floating > .form-control {
+    height: 48px;
+    min-height: 48px;
+    padding-right: 48px;
+}
+
+.cvvz-search .form-floating > .form-control:is(:focus, :not(:placeholder-shown)) {
+    padding-top: 20px;
+    padding-bottom: 4px;
+}
+
+.cvvz-search .form-floating > label {
+    padding-top: 12px;
+}
+
+.cvvz-search-clear {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    right: 12px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #7f7f7f;
+    font-size: 28px;
+    line-height: 1;
+}
+
+.cvvz-search-hidden {
+    display: none;
+}
+
+.cvvz-search-count {
+    display: none;
+    color: #7a7a7a;
+    font-size: 0.55em;
+    font-weight: 500;
+    vertical-align: 3px;
+    white-space: nowrap;
+}
+
+.cvvz-searching .cvvz-search-count {
+    display: inline;
+}
+
+.cvvz-searching .cvvz-program-count {
+    display: none;
+}
