@@ -40,6 +40,7 @@
         "src/program/features/my-terms.js",
         "src/program/features/term-conflicts.js",
         "src/program/features/program-count.js",
+        "src/program/features/login-hint.js",
         "src/participants/table.js",
         "src/participants/features/stats.js",
         "src/participants/features/compact-table.js",

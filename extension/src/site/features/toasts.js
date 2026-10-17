@@ -1,5 +1,3 @@
-const TOAST_DURATION_MS = 5000;
-
 registerFeature({
     page: 'site',
     name: 'toasts',
