@@ -11,10 +11,10 @@ function countOf(html) {
 }
 
 test('shows the number of programs next to the heading, including programs left as the site shows them', () => {
-    assert.equal(countOf(PAGE_2026), '110 programů');
+    assert.equal(countOf(PAGE_2026), '137 programů');
 
     const html = PAGE_2026.replace('<td>Míra náročnosti na interakci</td>', '<td>Nový údaj</td>');
-    assert.equal(countOf(html), '110 programů');
+    assert.equal(countOf(html), '137 programů');
 });
 
 test('writes the number of programs in correct Czech', () => {

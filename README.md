@@ -40,6 +40,7 @@ Každý modul jde vypnout v nastavení rozšíření.
 | `lecturer`      | Odkaz na další programy lektora je na jednom řádku za jménem lektora                            |
 | `terms`         | Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí) |
 | `term-capacity` | Upravit zobrazení volných míst a kapacity na srozumitelnější                                    |
+| `my-terms`      | Zvýraznit přihlášené programy a hlídací psy                                                     |
 | `description`   | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
 | `permalink`     | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení           |
 | `program-count` | Zobrazit u nadpisu celkový počet vypsaných programů                                             |

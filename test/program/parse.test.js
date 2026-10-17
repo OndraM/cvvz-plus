@@ -21,7 +21,7 @@ test('parses all programs of the 2026 page', () => {
     const { programs, failures } = parsePage(PAGE_2026);
 
     assert.deepEqual(failures, []);
-    assert.equal(programs.length, 110);
+    assert.equal(programs.length, 137);
 });
 
 test('parses details nested in "Další podrobnosti" (2026)', () => {
@@ -67,7 +67,7 @@ test('parses labels and surcharge', () => {
         interactionLevel: 'Střední',
         difficulty: 'Základní znalosti',
         surcharge: '100',
-        termCount: 0,
+        termCount: 1,
     });
 });
 
@@ -89,7 +89,7 @@ test('a program with an unknown detail row fails, the others still parse', () =>
     const { programs, failures } = parsePage(html);
 
     assert.deepEqual(failures, [{ id: 'program-644', reason: 'unknown row "Nový údaj"' }]);
-    assert.equal(programs.length, 109);
+    assert.equal(programs.length, 136);
 });
 
 test('a program with an unknown element in its block fails', () => {

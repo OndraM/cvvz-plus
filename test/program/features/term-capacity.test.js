@@ -23,6 +23,16 @@ test('shows the time shorter and the free places and capacity in words, keeping 
     assert.equal(clicks, 1);
 });
 
+test('shows the free places in words again after the site rewrites the counts when signing up or out', async () => {
+    const { document } = enhancePage(readFixture('program-2026-10.html'), { features: FEATURE });
+    const counts = document.querySelector('li[data-program-time-block-id="938"] .ajax-modal');
+
+    counts.textContent = '10/30/0';
+    await new Promise((resolve) => setTimeout(resolve));
+
+    assert.equal(counts.textContent, '20 volných míst z 30');
+});
+
 test('writes the free places and the people watching for a place in correct Czech, and leaves an unknown form as it is', () => {
     const dom = createPage('<html><body></body></html>');
     runContentScripts(dom, ['src/shared/features.js', ...FEATURE]);

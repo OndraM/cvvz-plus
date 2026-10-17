@@ -20,7 +20,7 @@ function hiddenOriginals(original) {
 test('replaces every program with a section and only hides the original elements', () => {
     const { document, entries, warnings } = enhancePage(PAGE_2026);
 
-    assert.equal(document.querySelectorAll('section.cvvz-program').length, 110);
+    assert.equal(document.querySelectorAll('section.cvvz-program').length, 137);
     assert.deepEqual(warnings, []);
     for (const { original } of entries) {
         for (const element of hiddenOriginals(original)) {
@@ -47,8 +47,8 @@ test('leaves a program that fails to parse untouched', () => {
 
     assert.ok(header.matches('div.alert'));
     assert.equal(header.classList.contains('cvvz-hidden'), false);
-    assert.equal(header.previousElementSibling.matches('section'), false);
-    assert.equal(document.querySelectorAll('section.cvvz-program').length, 109);
+    assert.equal(header.previousElementSibling, null);
+    assert.equal(document.querySelectorAll('section.cvvz-program').length, 136);
     assert.equal(warnings.length, 1);
     assert.deepEqual(structuredClone(warnings[0][1]), [{ id: 'program-644', reason: 'unknown row "Nový údaj"' }]);
 });
@@ -72,7 +72,7 @@ test('a failing feature leaves its program untouched, including elements other f
         assert.equal(element.classList.contains('cvvz-hidden'), false);
     }
     assert.equal(original.terms.previousElementSibling.matches('div.modal'), true);
-    assert.equal(document.querySelectorAll('section.cvvz-program').length, 109);
+    assert.equal(document.querySelectorAll('section.cvvz-program').length, 136);
     assert.deepEqual(structuredClone(warnings[0][1]), [{ id: 'program-644', reason: 'program/broken: boom' }]);
 });
 

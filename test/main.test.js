@@ -95,7 +95,7 @@ test('program features run only on the program page, also with a filter in the U
     assert.ok(elsewhere.querySelector('.cvvz-logo-plus'));
 
     const filtered = enhancePage(PROGRAM_PAGE, { url: 'https://www.cvvz.cz/program?program_filter%5Btype%5D=workshop' }).document;
-    assert.equal(filtered.querySelectorAll('section.cvvz-program').length, 110);
+    assert.equal(filtered.querySelectorAll('section.cvvz-program').length, 137);
 });
 
 test('participant features run only on the participant page, also with a filter in the URL', () => {
@@ -133,7 +133,7 @@ test('when the settings cannot be read, all features run as by default', () => {
     });
 
     assert.ok(document.querySelector('.cvvz-logo-plus'));
-    assert.equal(document.querySelectorAll('section.cvvz-program').length, 110);
+    assert.equal(document.querySelectorAll('section.cvvz-program').length, 137);
 });
 
 test('a failing feature is reported in the console and the following features still run', () => {
