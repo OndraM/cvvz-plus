@@ -49,11 +49,12 @@ Každý modul jde vypnout v nastavení rozšíření.
 
 **Stránka Moje programy** (`my-programs`, https://www.cvvz.cz/moje-programy):
 
-| Modul        | Popis                                                      |
-|--------------|------------------------------------------------------------|
-| `timeline`   | Přidat zobrazení přihlášených programů na časové ose       |
-| `menu-link`  | Přejmenovat v menu Přihlášení na programy na Moje programy |
-| `pdf-export` | Přesunout odkaz Export do PDF                              |
+| Modul               | Popis                                                      |
+|---------------------|------------------------------------------------------------|
+| `timeline`          | Přidat zobrazení přihlášených programů na časové ose       |
+| `menu-link`         | Přejmenovat v menu Přihlášení na programy na Moje programy |
+| `pdf-export`        | Přesunout odkaz Export do PDF                              |
+| `all-programs-link` | Přidat k nadpisu odkaz na všechny programy                 |
 
 **Stránka Přihlášení účastníci** (`participants`, https://www.cvvz.cz/prihlaseni-ucastnici):
 
