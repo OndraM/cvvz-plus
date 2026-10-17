@@ -1,5 +1,5 @@
 /* An original element of the site, which a feature shows differently. */
-.cvvz-hidden {
+:root .cvvz-hidden {
     display: none !important;
 }
 
