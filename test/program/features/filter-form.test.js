@@ -4,7 +4,7 @@ import { enhancePage, readFixture } from '../../helpers.js';
 
 const FEATURE = ['src/program/features/filter-form.js'];
 
-test('adds spacing below the filter form', () => {
+test('makes the filter form compact and adds spacing below it', () => {
     const { document } = enhancePage(readFixture('program-2026-10.html'), { features: FEATURE });
 
     assert.ok(document.getElementById('program_filter_form').classList.contains('cvvz-filter-form'));

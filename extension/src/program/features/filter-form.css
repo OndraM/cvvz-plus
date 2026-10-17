@@ -1,3 +1,38 @@
 .cvvz-filter-form {
     margin-bottom: 2em;
 }
+
+.cvvz-filter-form .form-floating {
+    margin-bottom: 12px;
+}
+
+.cvvz-filter-form .form-floating > .form-control {
+    height: 48px;
+    min-height: 48px;
+}
+
+.cvvz-filter-form .form-floating > .form-control:is(:focus, :not(:placeholder-shown)) {
+    padding-top: 20px;
+    padding-bottom: 4px;
+}
+
+.cvvz-filter-form .form-floating > label {
+    padding-top: 12px;
+}
+
+.cvvz-filter-form .form-floating > svg {
+    top: 16px;
+}
+
+.cvvz-filter-form .custom-checkbox {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.cvvz-filter-form .mt-24 {
+    margin-top: 0;
+}
+
+.cvvz-filter-form .btn {
+    min-height: 44px !important;
+}
