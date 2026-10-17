@@ -1,8 +1,3 @@
-const MY_TERM_STATES = {
-    'Odhlásit se': 'registered',
-    'Deaktivovat hlídacího psa': 'watching',
-};
-
 registerFeature({
     page: 'program',
     name: 'my-terms',
@@ -20,7 +15,7 @@ registerFeature({
 
 function markMyTerms(program) {
     const states = [...program.querySelectorAll('li[data-program-time-block-id]')].map((term) => {
-        const state = MY_TERM_STATES[term.querySelector('.js-program-action button')?.textContent.trim()];
+        const state = parseTermState(term);
         term.classList.toggle('cvvz-registered', state === 'registered');
         term.classList.toggle('cvvz-watching', state === 'watching');
         return state;

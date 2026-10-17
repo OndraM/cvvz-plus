@@ -33,19 +33,20 @@ Každý modul jde vypnout v nastavení rozšíření.
 
 **Stránka Program** (`program`, https://www.cvvz.cz/program):
 
-| Modul           | Popis                                                                                           |
-|-----------------|-------------------------------------------------------------------------------------------------|
-| `program-card`  | Zobrazit každý program v ohraničené kartě (pro lepší vizuální přehlednost)                      |
-| `program-type`  | Zobrazit typ programu (provedení) jako štítek s emoji v záhlaví programu                        |
-| `labels`        | Zobrazit parametry programu jako štítky (a ne ve schované tabulce)                              |
-| `lecturer`      | Odkaz na další programy lektora je na jednom řádku za jménem lektora                            |
-| `terms`         | Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí) |
-| `term-capacity` | Upravit zobrazení volných míst a kapacity na srozumitelnější                                    |
-| `my-terms`      | Zvýraznit přihlášené programy a hlídací psy                                                     |
-| `description`   | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
-| `permalink`     | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení           |
-| `program-count` | Zobrazit u nadpisu celkový počet vypsaných programů                                             |
-| `filter-form`   | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
+| Modul            | Popis                                                                                           |
+|------------------|-------------------------------------------------------------------------------------------------|
+| `program-card`   | Zobrazit každý program v ohraničené kartě (pro lepší vizuální přehlednost)                      |
+| `program-type`   | Zobrazit typ programu (provedení) jako štítek s emoji v záhlaví programu                        |
+| `labels`         | Zobrazit parametry programu jako štítky (a ne ve schované tabulce)                              |
+| `lecturer`       | Odkaz na další programy lektora je na jednom řádku za jménem lektora                            |
+| `terms`          | Zobrazit termíny přímo jako seznam u programu (místo rozbalovacího menu schovaného po kliknutí) |
+| `term-capacity`  | Upravit zobrazení volných míst a kapacity na srozumitelnější                                    |
+| `my-terms`       | Zvýraznit přihlášené programy a hlídací psy                                                     |
+| `term-conflicts` | Upozornit na souběh s přihlášeným programem                                                     |
+| `description`    | Detailní popis má rovnou zobrazený úryvek, zbytek po kliknutí                                   |
+| `permalink`      | Po najetí myší zobrazit ikonu 🔗, která zkopíruje odkaz na program pro snazší sdílení           |
+| `program-count`  | Zobrazit u nadpisu celkový počet vypsaných programů                                             |
+| `filter-form`    | Odsadit filtr od seznamu programů pro lepší přehlednost                                         |
 
 **Stránka Moje programy** (`my-programs`, https://www.cvvz.cz/moje-programy):
 
