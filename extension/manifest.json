@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CVVZ plus",
-  "version": "2026.10.4",
+  "version": "2026.10.5",
   "description": "Neoficiální rozšíření pro přehlednější web CVVZ",
   "icons": {
     "48": "icons/icon-48.png",
