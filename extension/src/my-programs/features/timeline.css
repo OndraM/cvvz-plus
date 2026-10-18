@@ -102,6 +102,22 @@
     font-weight: 600;
 }
 
+.cvvz-timeline-block-programs {
+    margin-top: auto;
+    padding-top: 2px;
+    color: #7b4a1e;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.cvvz-timeline-block-programs::after {
+    content: " →" / "";
+}
+
+.cvvz-timeline-program .cvvz-timeline-block-programs {
+    color: #fff;
+}
+
 .cvvz-timeline-unregister {
     position: absolute;
     top: 4px;
@@ -253,7 +269,8 @@
         transform: none;
     }
 
-    .cvvz-timeline-hour {
+    .cvvz-timeline-hour,
+    .cvvz-timeline-phone-only {
         display: none;
     }
 
@@ -334,7 +351,8 @@
         writing-mode: vertical-rl;
     }
 
-    .cvvz-timeline-counts {
+    .cvvz-timeline-counts,
+    .cvvz-timeline-wide-only {
         display: none;
     }
 

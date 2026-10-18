@@ -51,6 +51,8 @@ export function enhancePage(html, { url, features = FEATURE_SCRIPTS, disabledFea
     const warnings = [];
     window.console.warn = (...args) => warnings.push(args);
     stubExtensionStorage(window, { disabledFeatures });
+    // jsdom has no fetch: a request of a feature stays unanswered, unless the test answers it in beforeEnhance.
+    window.fetch = () => new Promise(() => {});
 
     runContentScripts(dom, [...BASE_SCRIPTS, ...features]);
     const { entries } = window.parseProgramList(window.document);

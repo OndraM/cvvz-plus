@@ -7,17 +7,24 @@ const PAGE = readFixture('moje-programy-2026-10.html');
 const URL = 'https://www.cvvz.cz/moje-programy';
 const FEATURE = ['src/my-programs/features/timeline.js'];
 const TAB_KEY = 'cvvz-plus-my-programs-tab';
+// The program page with a keyword of no program, as the timeline fetches it for the ids of the time blocks.
+const TIME_BLOCKS_PAGE = new JSDOM(readFixture('program-2026-10.html')).window.document.getElementById('program_filter_form').outerHTML;
 
 // Runs the timeline on the page at the given time, by default long before the event.
 // jsdom does not scroll, so scrolling is recorded, and so is the timer moving the current time, to call it in the test.
-function openPage(html = PAGE, { now = '2026-10-01T12:00', tab = null } = {}) {
+function openPage(html = PAGE, { now = '2026-10-01T12:00', tab = null, timeBlocksPage = TIME_BLOCKS_PAGE } = {}) {
     const scrolls = [];
     const timers = [];
+    const fetched = [];
     let setNow;
     const page = enhancePage(html, {
         url: URL,
         features: FEATURE,
         beforeEnhance: (window) => {
+            window.fetch = async (resource) => {
+                fetched.push(resource);
+                return { text: async () => timeBlocksPage };
+            };
             const RealDate = window.Date;
             let current = new RealDate(now).getTime();
             setNow = (time) => {
@@ -37,7 +44,14 @@ function openPage(html = PAGE, { now = '2026-10-01T12:00', tab = null } = {}) {
             }
         },
     });
-    return { ...page, scrolls, timers, setNow };
+    return { ...page, scrolls, timers, fetched, setNow };
+}
+
+const PROGRAM_LINKS = '.cvvz-timeline-program .cvvz-timeline-block-programs, .cvvz-timeline-watched .cvvz-timeline-block-programs';
+
+// The links to the programs of a block are added once the fetched page is read.
+function fetchDone() {
+    return new Promise((resolve) => setImmediate(resolve));
 }
 
 // The fixture page with these rows instead of its own, each as [date, weekday, from, to, title];
@@ -72,13 +86,13 @@ function isHidden(element) {
     return element.classList.contains('cvvz-hidden');
 }
 
-// Blocks of each day as "time text", the text being the program's title or the free block's texts.
+// Blocks of each day as "time text", the text being the program's title or the free block's texts besides its link.
 function daysOf(document) {
     return Object.fromEntries([...document.querySelectorAll('.cvvz-timeline-day')].map((day) => [
         day.querySelector('.cvvz-timeline-day-name').textContent,
         [...day.querySelectorAll('.cvvz-timeline-block')].map((block) => {
             const title = block.querySelector('.cvvz-timeline-title');
-            const [time, ...texts] = [...block.children].map((child) => child.textContent);
+            const [time, ...texts] = [...block.children].filter((child) => child.localName !== 'a').map((child) => child.textContent);
             return `${time} ${title ? title.textContent : texts.map((text) => text.trim()).filter(Boolean).join(' ')}`;
         }),
     ]));
@@ -111,18 +125,20 @@ test('shows the registered, lectured and watched programs and the free blocks in
     const { document } = openPage();
 
     assert.deepEqual(daysOf(document), {
-        'Pátek13. 11.': ['18:00\u201319:30 Volný blok Přihlásit se', '20:00\u201321:30 Ukázkový program', '22:00\u201323:30 Ukázkový hlídaný program v pátek'],
+        'Pátek13. 11.': ['18:00\u201319:30 Volný blok', '20:00\u201321:30 Ukázkový program', '22:00\u201323:30 Ukázkový hlídaný program v pátek'],
         'Sobota14. 11.': [
-            '8:00\u20139:30 Volný blok Přihlásit se',
+            '8:00\u20139:30 Volný blok',
             '10:00\u201311:30 Ukázkový program, který lektoruji',
             '14:00\u201315:30 Ukázkový program s opravdu hodně dlouhým názvem, který se nevejde na jeden řádek',
             '16:00\u201317:30 Ukázková dílna',
             '20:00\u201321:30 Ukázkové zakončení',
             '22:00\u201323:30 Ukázková beseda',
         ],
-        'Neděle15. 11.': ['8:30\u201310:00 Ukázkový hlídaný program v neděli', '10:30\u201312:00 Volný blok Přihlásit se'],
+        'Neděle15. 11.': ['8:30\u201310:00 Ukázkový hlídaný program v neděli', '10:30\u201312:00 Volný blok'],
     });
-    assert.equal(blockAt(document, '18:00\u201319:30').querySelector('a').getAttribute('href'), '/program?timeBlock=163');
+    const freeLink = blockAt(document, '18:00\u201319:30').querySelector('a');
+    assert.equal(freeLink.getAttribute('href'), '/program?timeBlock=163');
+    assert.deepEqual(textsOf(freeLink.children), ['Programy v tento \u010das', 'V\u0161echny programy v tento \u010das']);
 });
 
 test('shows the details of a registered program, with a copy of the site\'s form to unregister', () => {
@@ -211,6 +227,49 @@ test('shows the place of a watched program as the site fills it in', () => {
     assert.equal(blockOf(document, 'Ukázkový hlídaný program v pátek').querySelector('.cvvz-timeline-place').textContent.trim(), 'Učebna 12');
 });
 
+test('links each registered and watched program to all programs at its time, by the time blocks of the program page', async () => {
+    const { document, fetched, warnings } = openPage();
+    await fetchDone();
+    const links = [...document.querySelectorAll(PROGRAM_LINKS)];
+
+    assert.deepEqual(warnings, []);
+    assert.deepEqual(fetched, ['/program?program_filter%5Bkeyword%5D=cvvz-plus']);
+    assert.deepEqual(links.map((link) => [link.closest('.cvvz-timeline-block').querySelector('.cvvz-timeline-title').textContent, link.getAttribute('href')]), [
+        ['Ukázkový program', '/program?timeBlock=164'],
+        ['Ukázkový hlídaný program v pátek', '/program?timeBlock=165'],
+        ['Ukázkový program s opravdu hodně dlouhým názvem, který se nevejde na jeden řádek', '/program?timeBlock=168'],
+        ['Ukázková dílna', '/program?timeBlock=169'],
+        ['Ukázkové zakončení', '/program?timeBlock=170'],
+        ['Ukázková beseda', '/program?timeBlock=171'],
+        ['Ukázkový hlídaný program v neděli', '/program?timeBlock=172'],
+    ]);
+    assert.deepEqual([...links[0].children].map((text) => [text.className, text.textContent]), [
+        ['cvvz-timeline-wide-only', 'Programy v tento čas'],
+        ['cvvz-timeline-phone-only', 'Všechny programy v tento čas'],
+    ]);
+    assert.ok(links[0].nextElementSibling.matches('form.cvvz-timeline-unregister'));
+    assert.equal(blockOf(document, 'Ukázkový program, který lektoruji').querySelector('.cvvz-timeline-block-programs'), null);
+});
+
+test('links a program after midnight to its time block of the next day', async () => {
+    const { document } = openPage(pageWith([
+        ['13. 11. 2026', 'pátek', '22:00', '23:30', 'Večerní program'],
+        ['14. 11. 2026', 'sobota', '00:00', '01:30', 'Noční program'],
+    ]));
+    await fetchDone();
+
+    assert.equal(blockOf(document, 'Noční program').querySelector('.cvvz-timeline-block-programs').getAttribute('href'), '/program?timeBlock=174');
+});
+
+test('shows the timeline without the links when the program page has no time blocks', async () => {
+    const { document, warnings } = openPage(PAGE, { timeBlocksPage: '<form id="program_filter_form"></form>' });
+    await fetchDone();
+
+    assert.ok(blockOf(document, 'Ukázkový program'));
+    assert.equal(document.querySelector(PROGRAM_LINKS), null);
+    assert.deepEqual(structuredClone(warnings[0][1]), [{ id: 'my-programs/timeline', reason: 'time blocks not found' }]);
+});
+
 test('places the blocks on the shared time axis of the wide screen and in their own day on a phone', () => {
     const { document } = openPage();
 
@@ -262,8 +321,8 @@ test('shows a block of the night after midnight at the end of the evening before
     const friday = document.querySelector('.cvvz-timeline-day[data-date="2026-11-13"]');
 
     assert.deepEqual(daysOf(document), {
-        'Pátek13. 11.': ['22:00\u201323:30 Volný blok Přihlásit se', '0:00\u20131:30 Noční hra'],
-        'Sobota14. 11.': ['8:00\u20139:30 Volný blok Přihlásit se'],
+        'Pátek13. 11.': ['22:00\u201323:30 Volný blok', '0:00\u20131:30 Noční hra'],
+        'Sobota14. 11.': ['8:00\u20139:30 Volný blok'],
     });
     // Friday is from 22:00 to 2:00, the axis of all days from 8:00.
     assert.equal(friday.querySelector('.cvvz-timeline-track').style.getPropertyValue('--timeline-day-slots'), '48');

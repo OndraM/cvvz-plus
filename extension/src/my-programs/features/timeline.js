@@ -41,6 +41,10 @@ registerFeature({
         } else {
             tabs.selectTab(0);
         }
+
+        fetchTimeBlockIds().then((ids) => addTimelineBlockLinks(days, ids)).catch((error) => {
+            console.warn('CVVZ plus: některé části stránky zůstaly v původní podobě', [{ id: featureId(this), reason: error.message }]);
+        });
     },
 });
 
@@ -147,6 +151,7 @@ function buildTimelineDay(day, from) {
     }
     for (const block of day.blocks) {
         const blockElement = buildTimelineBlock(block);
+        block.element = blockElement;
         blockElement.style.setProperty('--timeline-columns', `${timelineSlot(block.start, from)} / ${timelineSlot(block.end, from)}`);
         blockElement.style.setProperty('--timeline-rows', `${timelineSlot(block.start, day.from)} / ${timelineSlot(block.end, day.from)}`);
         blockElement.style.setProperty('--timeline-lane', `${block.lane} / ${block.laneEnd}`);
@@ -160,13 +165,14 @@ function buildTimelineBlock(block) {
     const time = buildElement('span', 'cvvz-timeline-time', `${timelineTime(block.start)}–${timelineTime(block.end)}`);
     if (!block.program) {
         const element = buildElement('div', `cvvz-timeline-block cvvz-timeline-free${block.aside ? ' cvvz-timeline-aside' : ''}`);
-        const link = buildElement('a', '', 'Přihlásit se');
-        link.href = block.registerUrl;
         element.append(time);
-        if (!block.aside) {
-            element.append(buildElement('span', '', 'Volný blok'));
+        if (block.aside) {
+            const link = buildElement('a', '', 'Přihlásit se');
+            link.href = block.registerUrl;
+            element.append(link);
+        } else {
+            element.append(buildElement('span', '', 'Volný blok'), buildTimelineProgramsLink(block.registerUrl));
         }
-        element.append(link);
         return element;
     }
 
@@ -203,6 +209,57 @@ function buildTimelineBlock(block) {
         element.append(timelineFormCopy(block.unregisterForm, block.watched ? 'Zrušit hlídání' : 'Odhlásit se'));
     }
     return element;
+}
+
+// The ids of the time blocks by their date and times as readSchedule has them: "2026-11-13 1200-1290".
+// A row with a program has no id of its block; the time filter of the program page lists them all.
+// The keyword matches no program, so the page has the filter only.
+function fetchTimeBlockIds() {
+    return fetch('/program?program_filter%5Bkeyword%5D=cvvz-plus').then((response) => response.text()).then((html) => {
+        const document = new DOMParser().parseFromString(html, 'text/html');
+        const dates = new Map([...document.querySelectorAll('select[name="program_filter[date]"] option[value]:not([value=""])')]
+            .map((option) => [option.textContent.trim(), option.value]));
+        const ids = new Map();
+        for (const option of document.querySelectorAll('select[name="program_filter[time_block_id]"] option[value]:not([value=""])')) {
+            const match = option.textContent.trim().match(/^(\p{L}+) (\d{1,2}):(\d\d)\s*[-\u2013\u2014]\s*(\d{1,2}):(\d\d)$/u);
+            let date = dates.get(match?.[1]);
+            if (!date) {
+                throw new Error(`unexpected time block "${option.textContent.trim()}"`);
+            }
+            let { start, end } = scheduleTimes(match.slice(2));
+            // The night after midnight belongs to the evening before, as in readSchedule.
+            if (start < SCHEDULE_NIGHT_END) {
+                date = schedulePreviousDate(date);
+                start += 24 * 60;
+                end += 24 * 60;
+            }
+            ids.set(`${date} ${start}-${end}`, option.value);
+        }
+        if (ids.size === 0) {
+            throw new Error('time blocks not found');
+        }
+        return ids;
+    });
+}
+
+// A link to all programs at the time of a registered or watched program. A lectured one can't be left for another.
+function addTimelineBlockLinks(days, ids) {
+    for (const block of days.flatMap((day) => day.blocks).filter((block) => block.program && !block.lecturing)) {
+        const id = ids.get(`${block.date} ${block.start}-${block.end}`);
+        if (id) {
+            block.element.querySelector('.cvvz-timeline-unregister').before(buildTimelineProgramsLink(`/program?timeBlock=${id}`));
+        }
+    }
+}
+
+function buildTimelineProgramsLink(url) {
+    const link = buildElement('a', 'cvvz-timeline-block-programs');
+    link.append(
+        buildElement('span', 'cvvz-timeline-wide-only', 'Programy v tento čas'),
+        buildElement('span', 'cvvz-timeline-phone-only', 'Všechny programy v tento čas'),
+    );
+    link.href = url;
+    return link;
 }
 
 // A copy, as the list keeps the site's form. It is a plain form, which works without the site's scripts.
