@@ -87,6 +87,14 @@ test('on a filtered list without the user\'s program, notes it from the page My 
     assert.ok(termOf(document, '935').classList.contains('cvvz-term-taken'));
 });
 
+test('on a filtered list, notes the program the user lectures from the page My programs, as taken', async () => {
+    const { document } = openFilteredPage('https://www.cvvz.cz/program?program_filter%5Btype%5D=workshop');
+    await new Promise((resolve) => setTimeout(resolve));
+
+    assert.deepEqual(textsOf(termOf(document, '942').querySelectorAll('.cvvz-term-conflict')), ['V tu dobu máš: Ukázkový program, který lektoruji']);
+    assert.ok(termOf(document, '942').classList.contains('cvvz-term-taken'));
+});
+
 test('a program of the user on the filtered list is noted as the page shows it, only once', async () => {
     const { document } = openFilteredPage('https://www.cvvz.cz/program?program_filter%5Btype%5D=workshop');
     await new Promise((resolve) => setTimeout(resolve));

@@ -107,14 +107,14 @@ test('adds a tab with the timeline next to the list, with the list open', () => 
     assert.equal(isHidden(document.querySelector('.table-container')), false);
 });
 
-test('shows the registered and watched programs and the free blocks in the days of the table', () => {
+test('shows the registered, lectured and watched programs and the free blocks in the days of the table', () => {
     const { document } = openPage();
 
     assert.deepEqual(daysOf(document), {
         'Pátek13. 11.': ['18:00\u201319:30 Volný blok Přihlásit se', '20:00\u201321:30 Ukázkový program', '22:00\u201323:30 Ukázkový hlídaný program v pátek'],
         'Sobota14. 11.': [
             '8:00\u20139:30 Volný blok Přihlásit se',
-            '10:00\u201311:30 Volný blok Přihlásit se',
+            '10:00\u201311:30 Ukázkový program, který lektoruji',
             '14:00\u201315:30 Ukázkový program s opravdu hodně dlouhým názvem, který se nevejde na jeden řádek',
             '16:00\u201317:30 Ukázková dílna',
             '20:00\u201321:30 Ukázkové zakončení',
@@ -144,6 +144,29 @@ test('a program without a surcharge and with one watching for a free place', () 
     const { document } = openPage(PAGE.replace('>101/1000/0<', '>101/1000/1<'));
 
     assert.deepEqual(textsOf(blockOf(document, 'Ukázkový program').querySelector('.cvvz-timeline-details').children), ['101 z 1000 přihlášených · 1 hlídá volné místo']);
+});
+
+test('shows the surcharge as the site writes it, except "Ano", and no zero surcharge', () => {
+    const title = 'Ukázkový program s opravdu hodně dlouhým názvem, který se nevejde na jeden řádek';
+    for (const [surcharge, details] of [
+        ['dobrovolný příspěvek', ['8 z 30 přihlášených', 'Doplatek: dobrovolný příspěvek']],
+        ['0', ['8 z 30 přihlášených']],
+    ]) {
+        const { document } = openPage(PAGE.replace(/(<td>\s*)Ano(\s*<\/td>)/, `$1${surcharge}$2`));
+
+        assert.deepEqual(textsOf(blockOf(document, title).querySelector('.cvvz-timeline-details').children), details);
+    }
+});
+
+test('shows a program the participant lectures as a registered one, labelled and without the form to unregister', () => {
+    const { document, warnings } = openPage();
+    const block = blockOf(document, 'Ukázkový program, který lektoruji');
+
+    assert.deepEqual(warnings, []);
+    assert.deepEqual([...block.classList], ['cvvz-timeline-block', 'cvvz-timeline-program']);
+    assert.equal(block.querySelector('.cvvz-timeline-title').getAttribute('href'), '/program#program-108');
+    assert.deepEqual(textsOf(block.querySelector('.cvvz-timeline-details').children), ['18 z 30 přihlášených', 'Lektoruji']);
+    assert.equal(block.querySelector('form'), null);
 });
 
 test('shows the place and the rating as the site fills them in', () => {

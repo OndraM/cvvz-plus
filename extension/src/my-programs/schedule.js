@@ -18,13 +18,15 @@ function findScheduleTable(document) {
     return table;
 }
 
-// Reads the rows of the table into [{ date, day, weekday, start, end, program, watched, registerUrl, counts, surcharge, place, rating, unregisterForm }]:
+// Reads the rows of the table into [{ date, day, weekday, start, end, program, watched, lecturing, registerUrl, counts, surcharge, place, rating, unregisterForm }]:
 //   date            - "2026-11-13", `day` "13. 11." and `weekday` "pátek" as the site writes them
 //   start, end      - minutes from the midnight of the date, after 24 * 60 past it: a block of the night after midnight
 //                     belongs to the evening before, when the table has it
 //   program         - { title, url } of the registered program, null for a free block, which has `registerUrl` instead
 //   watched         - the program is not registered, only watched for a free place: the site marks it by an icon
+//   lecturing       - the participant lectures the program: the site marks it by another icon, and it has no form to unregister
 //   counts          - { registered, capacity, watching } of the program
+//   surcharge       - text of the cell, which can be any text, mostly "Ano"; null when empty, "Ne" or "0"
 //   place, rating   - cells of the site, or null when empty: what they hold once filled in is not known yet
 //   unregisterForm  - the site's form, which unregisters the participant from the program, or stops watching it
 // Throws on anything else in the table, so the features leave the page as the site shows it.
@@ -69,9 +71,10 @@ function readScheduleRow(row) {
         end,
         program: null,
         watched: false,
+        lecturing: false,
         registerUrl: null,
         counts: null,
-        surcharge: false,
+        surcharge: null,
         place: scheduleCellOrNull(placeCell),
         rating: scheduleCellOrNull(ratingCell),
         unregisterForm: null,
@@ -94,7 +97,8 @@ function readScheduleRow(row) {
 
 function readScheduleProgram(entry, link, countsCell, surchargeCell, actionCell) {
     entry.program = { title: scheduleText(link), url: link.getAttribute('href') };
-    entry.watched = link.parentElement.querySelector('svg') !== null;
+    entry.lecturing = link.parentElement.querySelector('span[title="Tento program lektoruji"]') !== null;
+    entry.watched = !entry.lecturing && link.parentElement.querySelector('svg') !== null;
 
     const countsMatch = scheduleText(countsCell).match(/^(\d+)\/(\d+)\/(\d+)$/);
     if (!countsMatch) {
@@ -103,14 +107,14 @@ function readScheduleProgram(entry, link, countsCell, surchargeCell, actionCell)
     const [registered, capacity, watching] = countsMatch.slice(1).map(Number);
     entry.counts = { registered, capacity, watching };
 
-    entry.surcharge = { Ano: true, Ne: false }[scheduleText(surchargeCell)];
-    if (entry.surcharge === undefined) {
-        throw new Error(`unexpected surcharge "${scheduleText(surchargeCell)}"`);
-    }
+    const surcharge = scheduleText(surchargeCell);
+    entry.surcharge = ['', 'Ne', '0'].includes(surcharge) ? null : surcharge;
 
-    entry.unregisterForm = actionCell.querySelector('form[action="/unregister-program-timeblock"]');
-    if (!entry.unregisterForm) {
-        throw new Error('missing unregister form');
+    if (!entry.lecturing) {
+        entry.unregisterForm = actionCell.querySelector('form[action="/unregister-program-timeblock"]');
+        if (!entry.unregisterForm) {
+            throw new Error('missing unregister form');
+        }
     }
 }
 

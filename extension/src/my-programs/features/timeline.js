@@ -187,8 +187,11 @@ function buildTimelineBlock(block) {
     }
     const details = buildElement('span', 'cvvz-timeline-details');
     details.append(buildElement('span', 'cvvz-timeline-counts', timelineCounts(block.counts)));
+    if (block.lecturing) {
+        details.append(buildElement('span', 'cvvz-timeline-lecturing', 'Lektoruji'));
+    }
     if (block.surcharge) {
-        details.append(buildElement('span', 'cvvz-timeline-surcharge', 'Doplatek'));
+        details.append(buildElement('span', 'cvvz-timeline-surcharge', block.surcharge === 'Ano' ? 'Doplatek' : `Doplatek: ${block.surcharge}`));
     }
     element.append(details);
     if (block.rating) {
@@ -196,7 +199,9 @@ function buildTimelineBlock(block) {
         rating.append(...timelineCopy(block.rating));
         element.append(rating);
     }
-    element.append(timelineFormCopy(block.unregisterForm, block.watched ? 'Zrušit hlídání' : 'Odhlásit se'));
+    if (!block.lecturing) {
+        element.append(timelineFormCopy(block.unregisterForm, block.watched ? 'Zrušit hlídání' : 'Odhlásit se'));
+    }
     return element;
 }
 
