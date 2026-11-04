@@ -16,7 +16,11 @@ export function readFixture(name) {
 }
 
 export function createPage(html, url = 'https://www.cvvz.cz/program') {
-    return new JSDOM(html, { url, runScripts: 'outside-only' });
+    const dom = new JSDOM(html, { url, runScripts: 'outside-only' });
+    for (const email of dom.window.document.querySelectorAll('.__cf_email__')) {
+        email.replaceWith(email.textContent);
+    }
+    return dom;
 }
 
 // Runs content scripts the way a browser does: as separate classic scripts sharing one global scope.
