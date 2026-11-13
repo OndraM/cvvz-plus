@@ -189,7 +189,7 @@ ale stěžuje si u Googlu a použijte Firefox.
 
 ```sh
 npm test            # testy nad uloženými stránkami v test/fixtures/
-npm run test:live   # načte aktuální stránku z webu a ověří, že s ní rozšíření stále funguke
+npm run test:live   # načte aktuální stránku z webu a ověří, že s ní rozšíření stále funguje
 npm run lint        # kontrola rozšíření validátorem addons.mozilla.org
 ```
 
