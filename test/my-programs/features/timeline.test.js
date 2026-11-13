@@ -106,6 +106,12 @@ function blockAt(document, time) {
     return [...document.querySelectorAll('.cvvz-timeline-block')].find((block) => block.querySelector('.cvvz-timeline-time').textContent === time);
 }
 
+const PLACE_URL = 'https://www.google.com/maps/search/?api=1&query=50.023517%2015.764798&query_place_id=ChIJw1wCMpnMDUcRk_6WQUWO7Lc';
+
+function placeOf(block) {
+    return block.querySelector('.cvvz-timeline-place').textContent.replace(/\s+/g, ' ').trim();
+}
+
 function placement(element) {
     return ['--timeline-columns', '--timeline-rows', '--timeline-lane'].map((name) => element.style.getPropertyValue(name));
 }
@@ -147,7 +153,9 @@ test('shows the details of a registered program, with a copy of the site\'s form
 
     assert.equal(block.querySelector('.cvvz-timeline-title').getAttribute('href'), '/program#program-103');
     assert.deepEqual(textsOf(block.querySelector('.cvvz-timeline-details').children), ['8 z 30 přihlášených', 'Doplatek']);
-    assert.equal(block.querySelector('.cvvz-timeline-place, .cvvz-timeline-rating'), null);
+    assert.equal(placeOf(block), '4.A (1, ZŠ Staňkova)');
+    assert.equal(block.querySelector('.cvvz-timeline-place a').getAttribute('href'), PLACE_URL);
+    assert.equal(block.querySelector('.cvvz-timeline-rating'), null);
 
     const form = block.querySelector('form.cvvz-timeline-unregister');
     assert.equal(form.getAttribute('action'), '/unregister-program-timeblock');
@@ -220,11 +228,17 @@ test('shows the watched programs of the table only, not those only in the site\'
 });
 
 test('shows the place of a watched program as the site fills it in', () => {
-    const row = PAGE.indexOf('/program#program-102');
-    const filled = PAGE.slice(0, row) + PAGE.slice(row).replace('<div></div>', '<div>Učebna 12</div>');
-    const { document } = openPage(filled);
+    const { document } = openPage();
+    const block = blockOf(document, 'Ukázkový hlídaný program v pátek');
 
-    assert.equal(blockOf(document, 'Ukázkový hlídaný program v pátek').querySelector('.cvvz-timeline-place').textContent.trim(), 'Učebna 12');
+    assert.equal(placeOf(block), '5.A (1, ZŠ Staňkova)');
+    assert.equal(block.querySelector('.cvvz-timeline-place a').getAttribute('href'), PLACE_URL);
+});
+
+test('shows no place of a program without one', () => {
+    const { document } = openPage();
+
+    assert.equal(blockOf(document, 'Ukázkové zakončení').querySelector('.cvvz-timeline-place'), null);
 });
 
 test('links each registered and watched program to all programs at its time, by the time blocks of the program page', async () => {
