@@ -27,7 +27,7 @@ function findScheduleTable(document) {
 //   lecturing       - the participant lectures the program: the site marks it by another icon, and it has no form to unregister
 //   counts          - { registered, capacity, watching } of the program
 //   surcharge       - text of the cell, which can be any text, mostly "Ano"; null when empty, "Ne" or "0"
-//   place, rating   - cells of the site, or null when empty: what they hold once filled in is not known yet
+//   place, rating   - cells of the site, or null when empty
 //   unregisterForm  - the site's form, which unregisters the participant from the program, or stops watching it
 // Throws on anything else in the table, so the features leave the page as the site shows it.
 function readSchedule(table) {

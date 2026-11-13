@@ -203,6 +203,10 @@ function buildTimelineBlock(block) {
     if (block.rating) {
         const rating = buildElement('span', 'cvvz-timeline-rating');
         rating.append(...timelineCopy(block.rating));
+        const siteButtons = block.rating.querySelectorAll('.ajax-modal');
+        rating.querySelectorAll('.ajax-modal').forEach((button, index) => {
+            button.addEventListener('click', () => siteButtons[index].click());
+        });
         element.append(rating);
     }
     if (!block.lecturing) {

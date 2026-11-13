@@ -193,16 +193,27 @@ test('shows a program the participant lectures as a registered one, labelled and
     assert.equal(block.querySelector('form'), null);
 });
 
-test('shows the place and the rating as the site fills them in', () => {
-    const programRow = PAGE.indexOf('/program#program-101');
-    const filled = PAGE.slice(0, programRow) + PAGE.slice(programRow)
-        .replace('<div></div>', '<div>Učebna 12</div>')
-        .replace(/(<td>\s*<\/td>)/, '<td><a href="/hodnoceni/1">Ohodnotit</a></td>');
-    const { document } = openPage(filled);
-    const block = blockOf(document, 'Ukázkový program');
+test('shows the rating of a registered and a watched program, opening the site\'s window to rate it', () => {
+    const { document } = openPage();
+    const siteOpened = [];
+    for (const siteButton of document.querySelectorAll('.table-container .ajax-modal')) {
+        siteButton.addEventListener('click', function () {
+            siteOpened.push(this.getAttribute('data-url'));
+        });
+    }
 
-    assert.equal(block.querySelector('.cvvz-timeline-place').textContent.trim(), 'Učebna 12');
-    assert.equal(block.querySelector('.cvvz-timeline-rating a').getAttribute('href'), '/hodnoceni/1');
+    for (const [title, url] of [
+        ['Ukázkový program', '/hodnoceni-programu/1001'],
+        ['Ukázkový hlídaný program v pátek', '/hodnoceni-programu/1002'],
+    ]) {
+        const button = blockOf(document, title).querySelector('.cvvz-timeline-rating [role="button"]');
+        assert.equal(button.textContent, 'Ohodnotit');
+
+        button.click();
+
+        assert.deepEqual(siteOpened, [url]);
+        siteOpened.length = 0;
+    }
 });
 
 test('shows a watched program of the table in its time block, with its details and a copy of the form to stop watching', () => {
