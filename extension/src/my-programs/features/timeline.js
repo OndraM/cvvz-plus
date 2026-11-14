@@ -274,11 +274,7 @@ function addTimelineBlockLinks(days, ids) {
 }
 
 function buildTimelineProgramsLink(url) {
-    const link = buildElement('a', 'cvvz-timeline-block-programs');
-    link.append(
-        buildElement('span', 'cvvz-timeline-wide-only', 'Programy v tento čas'),
-        buildElement('span', 'cvvz-timeline-phone-only', 'Všechny programy v tento čas'),
-    );
+    const link = buildElement('a', 'cvvz-timeline-block-programs', 'Programy v tento čas');
     link.href = url;
     return link;
 }

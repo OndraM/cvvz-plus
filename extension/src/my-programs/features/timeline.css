@@ -309,8 +309,7 @@
         transform: none;
     }
 
-    .cvvz-timeline-hour,
-    .cvvz-timeline-phone-only {
+    .cvvz-timeline-hour {
         display: none;
     }
 
@@ -389,10 +388,6 @@
     .cvvz-timeline-block.cvvz-timeline-aside {
         padding: 4px 0;
         writing-mode: vertical-rl;
-    }
-
-    .cvvz-timeline-wide-only {
-        display: none;
     }
 
     .cvvz-timeline-now {

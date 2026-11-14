@@ -147,7 +147,7 @@ test('shows the registered, lectured and watched programs and the free blocks in
     });
     const freeLink = blockAt(document, '18:00\u201319:30').querySelector('a');
     assert.equal(freeLink.getAttribute('href'), '/program?timeBlock=163');
-    assert.deepEqual(textsOf(freeLink.children), ['Programy v tento \u010das', 'V\u0161echny programy v tento \u010das']);
+    assert.equal(freeLink.textContent, 'Programy v tento \u010das');
 });
 
 test('shows the details of a registered program, with a copy of the site\'s form to unregister', () => {
@@ -271,10 +271,7 @@ test('links each registered and watched program to all programs at its time, by 
         ['Ukázková beseda', '/program?timeBlock=171'],
         ['Ukázkový hlídaný program v neděli', '/program?timeBlock=172'],
     ]);
-    assert.deepEqual([...links[0].children].map((text) => [text.className, text.textContent]), [
-        ['cvvz-timeline-wide-only', 'Programy v tento čas'],
-        ['cvvz-timeline-phone-only', 'Všechny programy v tento čas'],
-    ]);
+    assert.equal(links[0].textContent, 'Programy v tento čas');
     assert.ok(links[0].nextElementSibling.matches('form.cvvz-timeline-unregister'));
     assert.equal(blockOf(document, 'Ukázkový program, který lektoruji').querySelector('.cvvz-timeline-block-programs'), null);
 });
