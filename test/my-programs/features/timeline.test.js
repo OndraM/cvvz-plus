@@ -133,14 +133,17 @@ test('shows the registered, lectured and watched programs and the free blocks in
     assert.deepEqual(daysOf(document), {
         'Pátek13. 11.': ['18:00\u201319:30 Volný blok', '20:00\u201321:30 Ukázkový program', '22:00\u201323:30 Ukázkový hlídaný program v pátek'],
         'Sobota14. 11.': [
+            '7:00\u20138:30 Snídaně',
             '8:00\u20139:30 Volný blok',
             '10:00\u201311:30 Ukázkový program, který lektoruji',
+            '12:00\u201313:30 Oběd',
             '14:00\u201315:30 Ukázkový program s opravdu hodně dlouhým názvem, který se nevejde na jeden řádek',
             '16:00\u201317:30 Ukázková dílna',
+            '18:00\u201319:30 Večeře',
             '20:00\u201321:30 Ukázkové zakončení',
             '22:00\u201323:30 Ukázková beseda',
         ],
-        'Neděle15. 11.': ['8:30\u201310:00 Ukázkový hlídaný program v neděli', '10:30\u201312:00 Volný blok'],
+        'Neděle15. 11.': ['7:00\u20138:30 Snídaně', '8:30\u201310:00 Ukázkový hlídaný program v neděli', '10:30\u201312:00 Volný blok'],
     });
     const freeLink = blockAt(document, '18:00\u201319:30').querySelector('a');
     assert.equal(freeLink.getAttribute('href'), '/program?timeBlock=163');
@@ -298,22 +301,22 @@ test('shows the timeline without the links when the program page has no time blo
 test('places the blocks on the shared time axis of the wide screen and in their own day on a phone', () => {
     const { document } = openPage();
 
-    // The axis is from 8:00 to 24:00 in 5-minute slots, Friday is from 18:00.
-    assert.equal(document.querySelector('.cvvz-timeline-days').style.getPropertyValue('--timeline-slots'), '192');
+    // The axis is from 7:00 to 24:00 in 5-minute slots, Friday is from 18:00.
+    assert.equal(document.querySelector('.cvvz-timeline-days').style.getPropertyValue('--timeline-slots'), '204');
     assert.equal(document.querySelector('.cvvz-timeline-track').style.getPropertyValue('--timeline-day-slots'), '72');
-    assert.deepEqual(placement(blockOf(document, 'Ukázkový program')), ['145 / 163', '25 / 43', '1 / 2']);
-    assert.deepEqual(textsOf(document.querySelectorAll('.cvvz-timeline-hours-track span')).slice(0, 2), ['8:00', '9:00']);
+    assert.deepEqual(placement(blockOf(document, 'Ukázkový program')), ['157 / 175', '25 / 43', '1 / 2']);
+    assert.deepEqual(textsOf(document.querySelectorAll('.cvvz-timeline-hours-track span')).slice(0, 2), ['7:00', '8:00']);
     assert.deepEqual(textsOf(document.querySelector('.cvvz-timeline-day').querySelectorAll('.cvvz-timeline-hour')), ['18:00', '19:00', '20:00', '21:00', '22:00', '23:00']);
 });
 
 test('puts a free block at the time of a registered program aside, and free blocks at the same time next to each other', () => {
     const { document, warnings } = openPage(pageWith([
-        ['14. 11. 2026', 'sobota', '10:00', '11:30'],
-        ['14. 11. 2026', 'sobota', '10:00', '12:00'],
-        ['14. 11. 2026', 'sobota', '13:00', '17:30', 'Workshop'],
-        ['14. 11. 2026', 'sobota', '14:00', '15:30'],
-        ['14. 11. 2026', 'sobota', '16:00', '17:30'],
-        ['14. 11. 2026', 'sobota', '18:00', '19:00'],
+        ['13. 11. 2026', 'pátek', '10:00', '11:30'],
+        ['13. 11. 2026', 'pátek', '10:00', '12:00'],
+        ['13. 11. 2026', 'pátek', '13:00', '17:30', 'Workshop'],
+        ['13. 11. 2026', 'pátek', '14:00', '15:30'],
+        ['13. 11. 2026', 'pátek', '16:00', '17:30'],
+        ['13. 11. 2026', 'pátek', '18:00', '19:00'],
     ]));
     const asides = document.querySelectorAll('.cvvz-timeline-aside');
 
@@ -327,10 +330,34 @@ test('puts a free block at the time of a registered program aside, and free bloc
     assert.deepEqual(placement(blockAt(document, '18:00\u201319:00'))[2], '1 / 4');
 });
 
+test('shows the meals without links and forms, in the days of the table only', async () => {
+    const { document } = openPage();
+    await fetchDone();
+
+    assert.equal(document.querySelectorAll('.cvvz-timeline-meal').length, 4);
+    assert.equal(document.querySelector('.cvvz-timeline-meal :is(a, form)'), null);
+
+    const friday = openPage(pageWith([['13. 11. 2026', 'pátek', '18:00', '19:30']]));
+    assert.equal(friday.document.querySelector('.cvvz-timeline-meal'), null);
+});
+
+test('puts a meal and a free block or a program at its time next to each other', () => {
+    const { document } = openPage(pageWith([
+        ['14. 11. 2026', 'sobota', '08:00', '09:30'],
+        ['14. 11. 2026', 'sobota', '12:30', '14:00', 'Polední program'],
+    ]));
+
+    assert.equal(document.querySelector('.cvvz-timeline-aside'), null);
+    assert.deepEqual(placement(blockAt(document, '7:00\u20138:30'))[2], '1 / 2');
+    assert.deepEqual(placement(blockAt(document, '8:00\u20139:30'))[2], '2 / 3');
+    assert.deepEqual(placement(blockAt(document, '12:00\u201313:30'))[2], '1 / 2');
+    assert.deepEqual(placement(blockOf(document, 'Polední program'))[2], '2 / 3');
+});
+
 test('a block past midnight ends in its day', () => {
     const { document } = openPage(pageWith([
-        ['14. 11. 2026', 'sobota', '22:00', '23:30'],
-        ['14. 11. 2026', 'sobota', '23:30', '01:00', 'Noční hra'],
+        ['13. 11. 2026', 'pátek', '22:00', '23:30'],
+        ['13. 11. 2026', 'pátek', '23:30', '01:00', 'Noční hra'],
     ]));
 
     assert.equal(blockOf(document, 'Noční hra').querySelector('.cvvz-timeline-time').textContent, '23:30\u20131:00');
@@ -347,17 +374,17 @@ test('shows a block of the night after midnight at the end of the evening before
 
     assert.deepEqual(daysOf(document), {
         'Pátek13. 11.': ['22:00\u201323:30 Volný blok', '0:00\u20131:30 Noční hra'],
-        'Sobota14. 11.': ['8:00\u20139:30 Volný blok'],
+        'Sobota14. 11.': ['7:00\u20138:30 Snídaně', '8:00\u20139:30 Volný blok', '12:00\u201313:30 Oběd', '18:00\u201319:30 Večeře'],
     });
-    // Friday is from 22:00 to 2:00, the axis of all days from 8:00.
+    // Friday is from 22:00 to 2:00, the axis of all days from 7:00.
     assert.equal(friday.querySelector('.cvvz-timeline-track').style.getPropertyValue('--timeline-day-slots'), '48');
-    assert.deepEqual(placement(blockOf(document, 'Noční hra')).slice(0, 2), ['193 / 211', '25 / 43']);
+    assert.deepEqual(placement(blockOf(document, 'Noční hra')).slice(0, 2), ['205 / 223', '25 / 43']);
 });
 
 test('keeps a block of the night in its own day when the table has no evening before', () => {
-    const { document } = openPage(pageWith([['14. 11. 2026', 'sobota', '00:00', '01:30', 'Noční hra']]));
+    const { document } = openPage(pageWith([['13. 11. 2026', 'pátek', '00:00', '01:30', 'Noční hra']]));
 
-    assert.deepEqual(daysOf(document), { 'Sobota14. 11.': ['0:00\u20131:30 Noční hra'] });
+    assert.deepEqual(daysOf(document), { 'Pátek13. 11.': ['0:00\u20131:30 Noční hra'] });
 });
 
 test('leaves the page as the site shows it when the browser keeps no data of the site', () => {
@@ -393,7 +420,7 @@ test('during the event, shows the current time and scrolls to it when the timeli
 
     assert.equal(line.closest('.cvvz-timeline-day').dataset.date, '2026-11-14');
     assert.equal(line.textContent, '14:42');
-    assert.deepEqual(placement(line).slice(0, 2), ['81 / span 1', '81 / span 1']);
+    assert.deepEqual(placement(line).slice(0, 2), ['93 / span 1', '93 / span 1']);
     assert.equal(line.style.getPropertyValue('--timeline-slot-part'), '0.4');
     assert.equal(scrolls.length, 1);
     assert.equal(scrolls[0].element, line);
@@ -443,7 +470,7 @@ test('after midnight, shows the current time in the night of the evening before'
 
     assert.equal(line.closest('.cvvz-timeline-day').dataset.date, '2026-11-13');
     assert.equal(line.textContent, '0:40');
-    assert.deepEqual(placement(line).slice(0, 2), ['201 / span 1', '33 / span 1']);
+    assert.deepEqual(placement(line).slice(0, 2), ['213 / span 1', '33 / span 1']);
 });
 
 test('before the event, shows no current time and does not scroll', async () => {

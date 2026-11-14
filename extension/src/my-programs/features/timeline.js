@@ -7,6 +7,12 @@
 
 const TIMELINE_TAB_KEY = 'cvvz-plus-my-programs-tab';
 const TIMELINE_SLOT = 5;
+const TIMELINE_MEALS = [
+    { date: '2026-11-14', start: 7 * 60, end: 8 * 60 + 30, meal: 'Snídaně' },
+    { date: '2026-11-14', start: 12 * 60, end: 13 * 60 + 30, meal: 'Oběd' },
+    { date: '2026-11-14', start: 18 * 60, end: 19 * 60 + 30, meal: 'Večeře' },
+    { date: '2026-11-15', start: 7 * 60, end: 8 * 60 + 30, meal: 'Snídaně' },
+];
 
 registerFeature({
     page: 'my-programs',
@@ -54,18 +60,24 @@ function timelineDays(entries) {
         throw new Error('no time blocks');
     }
     const days = new Map();
-    for (const entry of [...entries].sort((a, b) => a.date.localeCompare(b.date) || a.start - b.start)) {
+    for (const entry of [...entries].sort((a, b) => a.date.localeCompare(b.date))) {
         if (!days.has(entry.date)) {
             days.set(entry.date, { date: entry.date, day: entry.day, weekday: entry.weekday, blocks: [] });
         }
         days.get(entry.date).blocks.push(entry);
     }
-    return [...days.values()].map((day) => ({
-        ...day,
-        from: Math.floor(Math.min(...day.blocks.map((block) => block.start)) / 60) * 60,
-        to: Math.ceil(Math.max(...day.blocks.map((block) => block.end)) / 60) * 60,
-        lanes: timelineLanes(day.blocks),
-    }));
+    for (const meal of TIMELINE_MEALS) {
+        days.get(meal.date)?.blocks.push({ ...meal });
+    }
+    return [...days.values()].map((day) => {
+        day.blocks.sort((a, b) => a.start - b.start);
+        return {
+            ...day,
+            from: Math.floor(Math.min(...day.blocks.map((block) => block.start)) / 60) * 60,
+            to: Math.ceil(Math.max(...day.blocks.map((block) => block.end)) / 60) * 60,
+            lanes: timelineLanes(day.blocks),
+        };
+    });
 }
 
 // Lanes of blocks at the same time, side by side as in a calendar; registered programs are never at the same time.
@@ -77,7 +89,7 @@ function timelineLanes(blocks) {
     const programs = blocks.filter((block) => block.program && !block.watched);
     const laned = [];
     for (const block of blocks) {
-        block.aside = !block.program && programs.some((program) => overlap(block, program));
+        block.aside = !block.program && !block.meal && programs.some((program) => overlap(block, program));
         if (!block.aside) {
             block.lane = 1;
             while (laned.some((other) => other.lane === block.lane && overlap(block, other))) {
@@ -163,6 +175,11 @@ function buildTimelineDay(day, from) {
 
 function buildTimelineBlock(block) {
     const time = buildElement('span', 'cvvz-timeline-time', `${timelineTime(block.start)}–${timelineTime(block.end)}`);
+    if (block.meal) {
+        const element = buildElement('div', 'cvvz-timeline-block cvvz-timeline-meal');
+        element.append(time, buildElement('span', 'cvvz-timeline-title', block.meal));
+        return element;
+    }
     if (!block.program) {
         const element = buildElement('div', `cvvz-timeline-block cvvz-timeline-free${block.aside ? ' cvvz-timeline-aside' : ''}`);
         element.append(time);
